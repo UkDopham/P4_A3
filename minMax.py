@@ -23,7 +23,7 @@ class minMax:
 
     def actions(self,n):
         """ liste des actions possibles, et les ajoutes au n  """
-        jeuxPossible = n.valeur.joueProchainsCoups(1)
+        jeuxPossible = n.valeur.joueProchainsCoups(n.valeur.notDernierJoueur())
         # print('tailleJeux possibles: ',len(jeuxPossible))
         cpt=0
         n.enfants=[]
@@ -31,6 +31,7 @@ class minMax:
             n.enfants.append(noeud(jeu,[]))
             # print(cpt)
             cpt+=1
+            # print(jeu)
         # print('nb de noeuds: ',len(n.enfants))
         return n.enfants
 
@@ -40,7 +41,7 @@ class minMax:
 
     def utility(self,n):
         """ recupere la valeur de n.valeur  """
-        return n.valeur.fitness(1)
+        return n.valeur.fitness(n.valeur.dernierJoueur)
 
 
 

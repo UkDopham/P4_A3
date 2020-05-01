@@ -99,7 +99,7 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA9"
+idjeu="Alex_vs_IA2409"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
@@ -112,7 +112,9 @@ from minMax import minMax
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
     mM = minMax(-50000,50000,puissance4IA,1)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),3)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
+    puissance4IA.joue(1,colonneChoisie)
+    print('Fitness: '+str(puissance4IA.fitness(1)))
     print(colonneChoisie)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
@@ -120,11 +122,13 @@ def monjeu():
 
 # cette fonction est à remplacer une qui saisie le jeu de l'adversaire à votre IA
 def appliqueJeuAdv(jeu):
+    print(str(jeu))
     puissance4IA.joue(2,jeu)
+    print('Fitness: '+str( puissance4IA.fitness(2) ))
     print("jeu de l'adversair est ", jeu)
 
 from puissance4 import puissance4
-puissance4IA = puissance4(grilleDim,grilleDim,50000)
+puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
 
 if(joueurLocalquiCommence):
     joueurLocal=2
@@ -143,14 +147,13 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
-        jeuAdv=loopToGetJeuAdv( 10,idjeu,idjoueurDistant,tour)
+        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
-        print(puissance4IA)
     else:
-        jeuAdv=loopToGetJeuAdv( 10,idjeu,idjoueurDistant,tour)
+        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
