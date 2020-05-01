@@ -42,8 +42,9 @@ class puissance4:
                 p.append(colonne)
             
             return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p)
-        
-            
+    
+    def termine(self):
+            return True if self.fitness(self.JOUEUR) == self.valeurMax or self.fitness(self.ADV) == -self.valeurMax else False
         
     def fitness(self, joueur):
         points = 0
@@ -53,14 +54,26 @@ class puissance4:
         v_joueur.extend(self.vecteursDiagolanne(joueur))
         
         for i in range(0, len(v_joueur)):
-            points += v_joueur[i].points(self.valeurMax)
+            p =  v_joueur[i].points(self.valeurMax)
+            
+            if p == self.valeurMax:
+                points = self.valeurMax
+                break
+            else:
+                points += p
         
         v_adver = self.vecteursLigne(adv) #alignement jetons de l'adversaire
         v_adver.extend(self.vecteursColonne(adv))
         v_adver.extend(self.vecteursDiagolanne(adv))
         
         for i in range(0, len(v_adver)):
-            points -= v_adver[i].points(self.valeurMax)
+            p = v_adver[i].points(self.valeurMax)
+            
+            if p == self.valeurMax:
+                points = -self.valeurMax
+                break
+            else:
+                points -= p
             
         return points
         
