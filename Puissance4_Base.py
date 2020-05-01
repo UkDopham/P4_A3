@@ -99,21 +99,21 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2"
+idjeu="Alex_vs_IA9"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
-joueurLocalquiCommence=True
+joueurLocalquiCommence=False
 
 from noeud import noeud
 from minMax import minMax
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    mM = minMax(-10000,10000,puissance4IA,1)
+    mM = minMax(-50000,50000,puissance4IA,1)
     colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),3)
-    
+    print(colonneChoisie)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
 
@@ -124,7 +124,7 @@ def appliqueJeuAdv(jeu):
     print("jeu de l'adversair est ", jeu)
 
 from puissance4 import puissance4
-puissance4IA = puissance4(grilleDim,grilleDim,10000)
+puissance4IA = puissance4(grilleDim,grilleDim,50000)
 
 if(joueurLocalquiCommence):
     joueurLocal=2
@@ -148,6 +148,7 @@ while(True):
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
+        print(puissance4IA)
     else:
         jeuAdv=loopToGetJeuAdv( 10,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA

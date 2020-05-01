@@ -9,8 +9,8 @@ from puissance4 import puissance4
 
 class minMax:
 
-    MIN_VAL = -1000
-    MAX_VAL = 1000
+    MIN_VAL = -1000000
+    MAX_VAL = 1000000
     
     def __init__(self,min,max,plateau,idJoueur): # utile ?
         self.MIN_VAL = min
@@ -19,35 +19,43 @@ class minMax:
         self.idJoueur = idJoueur
 
 
-    # noeud.valeur = instance du plateau de jeu (puissance4)
+    # n.valeur = instance du plateau de jeu (puissance4)
 
-    def actions(self,noeud):
-        """ liste des actions possibles, et les ajoutes au noeud  """
-        jeuxPossible = noeud.valeur.joueProchainsCoups(1)
+    def actions(self,n):
+        """ liste des actions possibles, et les ajoutes au n  """
+        jeuxPossible = n.valeur.joueProchainsCoups(1)
+        # print('tailleJeux possibles: ',len(jeuxPossible))
+        cpt=0
+        n.enfants=[]
         for jeu in jeuxPossible:
-            noeud.enfant.append(noeud(jeu))
-        return noeud.enfant
+            n.enfants.append(noeud(jeu,[]))
+            # print(cpt)
+            cpt+=1
+        # print('nb de noeuds: ',len(n.enfants))
+        return n.enfants
 
-    def terminialTest(self,noeud): 
-        """ test si noeud.valeur est terminal  """
-        return noeud.valeur.termine
+    def terminialTest(self,n): 
+        """ test si n.valeur est terminal  """
+        return n.valeur.termine()
 
-    def utility(self,noeud):
-        """ recupere la valeur de noeud.valeur  """
-        return noeud.valeur.fitness(1)
+    def utility(self,n):
+        """ recupere la valeur de n.valeur  """
+        return n.valeur.fitness(1)
 
 
 
-    def minimax_Decision_AlphaBeta(self, noeud, rangMax):
+    def minimax_Decision_AlphaBeta(self, n, rangMax):
 
         # if self.maximise:
         print('MAXIMISE')   
-        colonne, score = self.maxValueAB(noeud,self.MIN_VAL,self.MAX_VAL, rangMax)
+        node, score = self.maxValueAB(n,self.MIN_VAL,self.MAX_VAL, rangMax)
+        # colonne = ""
         # else:
         #     print('MINIMISE')
         #     self.node, val = self.MinValueAB(self.node,self.MIN_VAL,self.MAX_VAL, rangMax)
         
         print('Score trouvee: ',score)
+        colonne = node.valeur.dernierCoupJoue
         print('colonne a jouer: ',colonne)
   
         return colonne, score
@@ -55,14 +63,19 @@ class minMax:
 
 
 
-    def maxValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.terminialTest(noeud) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
-            return None,self.utility(noeud)
+    def maxValueAB(self,n,alpha,beta,rang=0):
+        # print('maxValueAB')
+        if  rang == 0 or self.terminialTest(n) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
+            return None, self.utility(n)
         v = self.MIN_VAL
         node = None
-        for action in self.actions(noeud): # pour chacuns des noeuds fils,
+        self.actions(n)
+        if len(n.enfants)==0:
+            print('Pas d enfants!!!!')
+        for action in n.enfants: # pour chacuns des ns fils,
+            # print('noeud: ',action.valeur)
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
-            if val > v:
+            if val >= v:
                 node = action
             v = max(v,val)      # cherche la plus grande
             if v >= beta:
@@ -70,14 +83,17 @@ class minMax:
             alpha = max(alpha,v)
         return node,v # puis la retourne
 
-    def minValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.terminialTest(noeud) :
-            return None, self.utility(noeud)
+    def minValueAB(self,n,alpha,beta,rang=0):
+        if  rang == 0 or self.terminialTest(n) :
+            return None, self.utility(n)
         v = self.MAX_VAL
         node = None
-        for action in self.actions(noeud):
+        self.actions(n)
+        if len(n.enfants)==0:
+            print('Pas d enfants!!!!')
+        for action in n.enfants:
             nd, val = self.maxValueAB(action,alpha,beta,rang-1)
-            if val < v:
+            if val <= v:
                 node = action
             v = min(v,val)
             if v <= alpha:
