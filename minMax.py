@@ -56,8 +56,8 @@ class minMax:
 
 
     def maxValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.terminialTest(noeud.valeur) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
-            return None,self.utility(noeud.valeur)
+        if  rang == 0 or self.terminialTest(noeud) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
+            return None,self.utility(noeud)
         v = self.MIN_VAL
         node = None
         for action in self.actions(noeud): # pour chacuns des noeuds fils,
@@ -71,8 +71,8 @@ class minMax:
         return node,v # puis la retourne
 
     def minValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.terminialTest(noeud.valeur) :
-            return None, self.utility(noeud.valeur)
+        if  rang == 0 or self.terminialTest(noeud) :
+            return None, self.utility(noeud)
         v = self.MAX_VAL
         node = None
         for action in self.actions(noeud):
