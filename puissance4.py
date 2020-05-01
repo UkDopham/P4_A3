@@ -58,7 +58,7 @@ class puissance4:
             
             if p == self.valeurMax:
                 points = self.valeurMax
-                break
+                return points
             else:
                 points += p
         
@@ -71,7 +71,7 @@ class puissance4:
             
             if p == self.valeurMax:
                 points = -self.valeurMax
-                break
+                return points
             else:
                 points -= p
             
