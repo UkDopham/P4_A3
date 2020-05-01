@@ -16,7 +16,7 @@ class vecteur:
         coordonnees = []
         for i in range(0, len(self.valeurs)):#on recuperer les alignements de jetons
             if self.valeurs[i] != (self.joueur or 0):
-                coordonnees.append(i, self.valeurs[i])
+                coordonnees.append([i, self.valeurs[i]])
             else:
                 coordonnees = []
                 
