@@ -17,19 +17,23 @@ class MinMax:
         self.idJoueur = idJoueur
 
 
-    def Actions(self,no):
-        """ liste des actions possibles  """
-        # A FAIRE 
+    # noeud.valeur = instance du plateau de jeu (puissance4)
+
+    def Actions(self,noeud):
+        """ liste des actions possibles, et les ajoutes au noeud  """
+        # jeuxPossible = # A FAIRE (recuperer methode dans puissance4: joueProchainsTours)
+        # for jeu in jeuxPosible:
+        #   noeud.enfant.append(Noeud(jeu))
         return []
 
-    def TerminialTest(self,no): 
-        """ test si s est terminal  """
-        # A FAIRE 
+    def TerminialTest(self,noeud): 
+        """ test si noeud.valeur est terminal  """
+        # return # A FAIRE (recuperer methode dans puissance4: est termine)
         return []
 
-    def Utility(self,no):
-        """ recupere la valeur de s  """
-        # A FAIRE ( fitness )
+    def Utility(self,noeud):
+        """ recupere la valeur de noeud.valeur  """
+        # A FAIRE  (recuperer methode dans puissance4: fitness )
         return []
 
     
@@ -64,23 +68,23 @@ class MinMax:
 
 
     def MaxValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.TerminialTest(noeud) :
-            return None,self.Utility(noeud)
+        if  rang == 0 or self.TerminialTest(noeud.valeur) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
+            return None,self.Utility(noeud.valeur)
         v = self.MIN_VAL
         node = None
-        for action in self.Actions(noeud):
-            nd, val = self.MinValueAB(action,alpha,beta,rang-1)
+        for action in self.Actions(noeud): # pour chacuns des noeuds fils,
+            nd, val = self.MinValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
             if val > v:
                 node = action
-            v = max(v,val)
+            v = max(v,val)      # cherche la plus grande
             if v >= beta:
-                return action,v
+                return node,v   # puis la retourne
             alpha = max(alpha,v)
-        return node,v
+        return node,v # puis la retourne
 
     def MinValueAB(self,noeud,alpha,beta,rang=0):
-        if  rang == 0 or self.TerminialTest(noeud) :
-            return None, self.Utility(noeud)
+        if  rang == 0 or self.TerminialTest(noeud.valeur) :
+            return None, self.Utility(noeud.valeur)
         v = self.MAX_VAL
         node = None
         for action in self.Actions(noeud):
@@ -89,6 +93,6 @@ class MinMax:
                 node = action
             v = min(v,val)
             if v <= alpha:
-                return action,v
+                return node,v
             beta = min(beta,v)
         return node,v
