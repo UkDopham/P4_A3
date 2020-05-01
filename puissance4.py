@@ -12,11 +12,15 @@ class puissance4:
     JOUEUR = 1
     ADV = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
-        self.creationMatrice()
+        
+        if plateau == None :
+            self.creationMatrice()
+        else:
+            self.plateau = plateau
         
         
     def creationMatrice(self): #On crée la matrice et on l'initialise toutes les valeurs à 0.
@@ -27,6 +31,19 @@ class puissance4:
                 colonne.append(0)
                 
             self.plateau.append(colonne)
+            
+    def clone(self): #on crée une nouvelle instance de la classe puissance4
+            p = []
+            for i in range(0, self.tailleLigne):
+                colonne = []
+                for j in range (0, self.tailleColonne):
+                    colonne.append(self.plateau[i][j])
+                
+                p.append(colonne)
+            
+            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p)
+        
+            
         
     def fitness(self, joueur):
         points = 0
