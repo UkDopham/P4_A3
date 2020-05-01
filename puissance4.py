@@ -9,6 +9,9 @@ from vecteur import vecteur
 
 class puissance4:
     
+    JOUEUR = 1
+    ADV = 2
+    
     def __init__(self, tailleLigne, tailleColonne, valeurMax):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
@@ -26,7 +29,35 @@ class puissance4:
             self.plateau.append(colonne)
         
     def fitness(self, joueur):
-        v_ligne = self.vecteursligne(joueur)
+        points = 0
+        adv = self.ADV if joueur == self.JOUEUR else self.JOUEUR
+        v_joueur = self.vecteursLigne(joueur) #alignement jetons du joueur
+        v_joueur.extend(self.vecteursColonne(joueur))
+        v_joueur.extend(self.vecteursDiagolanne(joueur))
+        
+        for i in range(0, len(v_joueur)):
+            points += v_joueur[i].points(self.valeurMax)
+        
+        v_adver = self.vecteursLigne(adv) #alignement jetons de l'adversaire
+        v_adver.extend(self.vecteursColonne(adv))
+        v_adver.extend(self.vecteursDiagolanne(adv))
+        
+        for i in range(0, len(v_adver)):
+            points -= v_adver[i].points(self.valeurMax)
+            
+        return points
+        
+    def vecteursDiagolanne(self, joueur):
+        vecteurs = []
+        for ligne in range(0, self.tailleLigne - 3):
+            for colonne in range(0, self.tailleColonne - 3):
+                v = []
+                v.append(self.plateau[ligne][colonne])
+                v.append(self.plateau[ligne + 1][colonne + 1])
+                v.append(self.plateau[ligne + 2][colonne + 2])
+                v.append(self.plateau[ligne + 3][colonne + 3])
+                vecteurs.append(vecteur(v, joueur))
+        return vecteurs
         
     def vecteursColonne(self, joueur):
         vecteurs = []
@@ -43,13 +74,12 @@ class puissance4:
     def vecteursLigne(self, joueur):
         vecteurs = []
         for ligne in range(0, len(self.plateau)):
-            for colonne in range(0, len(self.plateau[ligne]) - 4):
+            for colonne in range(0, len(self.plateau[ligne]) - 3):
                 v = []
                 v.append(self.plateau[ligne][colonne])
                 v.append(self.plateau[ligne][colonne + 1])
                 v.append(self.plateau[ligne][colonne + 2])
                 v.append(self.plateau[ligne][colonne + 3])
-                v.append(self.plateau[ligne][colonne + 4])
                 vecteurs.append(vecteur(v, joueur))
             
         return vecteurs
