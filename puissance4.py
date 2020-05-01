@@ -54,3 +54,37 @@ class puissance4:
             
         return vecteurs
         
+
+
+    def joueProchainsCoups(self,joueur):
+        """ Calcule toutes les prochaines actions possibles """
+        colonnesJouables = []
+        for indexeColonne in range(self.tailleLigne):
+            if self.plateau[self.tailleColonne-1][indexeColonne] == 0:
+                colonnesJouables.append(indexeColonne)
+        
+        coupsJoues = []
+        for indexeColonne in colonnesJouables:
+            coupsJoues.append(self.joue(joueur,indexeColonne,True))
+        return coupsJoues
+
+        
+    def joue(self, joueur, colonne, clone = False):
+        """ Prend en compte une action sur une case donnee avec un joueur donne. Propose l'option de cloner le resultat sur une nouvelle instance """
+        if clone:
+            jeuclone = self.clone()
+
+            for indexeLigne in range(self.tailleColonne):
+                if jeuclone.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] == 0:
+                    jeuclone.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] = joueur
+                    break
+            return jeuclone
+        else:
+            for indexeLigne in range(self.tailleColonne):
+                if self.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] == 0:
+                    self.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] = joueur
+                    break
+        return None
+
+
+
