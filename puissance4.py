@@ -12,7 +12,7 @@ class puissance4:
     JOUEUR = 1
     ADV = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None,derniereCoupJoue = None):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
@@ -41,7 +41,7 @@ class puissance4:
                 
                 p.append(colonne)
             
-            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p)
+            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.derniereCoupJoue)
     
     def termine(self):
             return True if self.fitness(self.JOUEUR) == self.valeurMax or self.fitness(self.ADV) == -self.valeurMax else False
@@ -138,12 +138,14 @@ class puissance4:
                 if jeuclone.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] == 0:
                     jeuclone.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] = joueur
                     break
+            jeuclone.derniereCoupJoue = colonne
             return jeuclone
         else:
             for indexeLigne in range(self.tailleColonne):
                 if self.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] == 0:
                     self.plateau[self.tailleColonne-1-indexeLigne][self.tailleLigne-1] = joueur
                     break
+            self.derniereCoupJoue = colonne
         return None
 
 
