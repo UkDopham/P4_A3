@@ -12,7 +12,7 @@ class vecteur:
         self.joueur = joueur
         
     
-    def points(self): 
+    def points(self, v_max): 
         coordonnees = []
         for i in range(0, len(self.valeurs)):#on recuperer les alignements de jetons
             if self.valeurs[i] != (self.joueur or 0):
@@ -26,6 +26,6 @@ class vecteur:
                 if coordonnees[i][1] != 0: # on compte le nb de jetons
                     points += 1
         
-        return points            
+        return v_max if points == 4 else points    #v_max pour indiquer que l'on peut gagner ce tours !        
             
         
