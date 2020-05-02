@@ -118,6 +118,17 @@ class puissance4:
                 v.append(self.plateau[ligne + 2][colonne + 2])
                 v.append(self.plateau[ligne + 3][colonne + 3])
                 vecteurs.append(vecteur(v, joueur, "diago"))
+                
+        for ligne in range(self.tailleColonne - 1, 2, -1):
+            for colonne in range(0, self.tailleLigne - 3):
+                v = []
+                v.append(self.plateau[ligne][colonne])
+                v.append(self.plateau[ligne - 1][colonne + 1])                
+                v.append(self.plateau[ligne - 2][colonne + 2])
+                v.append(self.plateau[ligne - 3][colonne + 3])
+                vecteurs.append(vecteur(v, joueur, "diago"))
+        
+        
         return vecteurs
         
     def vecteursColonne(self, joueur):

@@ -32,7 +32,8 @@ class vecteur:
             for i in range(0, len(coordonnees)):
                 if coordonnees[i][1] != 0: # on compte le nb de jetons
                     points += 1
-        
+        if points <= 1:
+            points = 0
         return v_max if points == 4 else points    #v_max pour indiquer que l'on peut gagner ce tours !        
             
         
