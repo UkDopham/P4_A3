@@ -42,7 +42,8 @@ class minMax:
 
     def utility(self,n):
         """ recupere la valeur de n.valeur  """
-        return n.valeur.fitness(n.valeur.dernierJoueur)
+        return n.valeur.fitness(n.valeur.notDernierJoueur())
+        # return n.valeur.fitness(n.valeur.dernierJoueur)
 
 
 
