@@ -7,10 +7,18 @@ Created on Fri May  1 11:48:58 2020
 
 class vecteur:
     
-    def __init__(self, valeurs, joueur):
+    def __init__(self, valeurs, joueur, t):
         self.valeurs = valeurs
         self.joueur = joueur
+        self.t = t
         
+    
+    def __str__(self):
+        content = ""
+        for i in range(0, len(self.valeurs)):
+            content = content + " " + str(self.valeurs[i])
+        content = content + " " + self.t
+        return content
     
     def points(self, v_max): 
         coordonnees = []
