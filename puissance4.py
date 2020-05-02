@@ -12,17 +12,22 @@ class puissance4:
     JOUEUR = 1
     ADV = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None,derniereCoupJoue = None):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
-        
+        self.dernierCoupJoue = dernierCoupJoue
+        self.dernierJoueur = dernierJoueur
+            
         if plateau == None :
             self.creationMatrice()
         else:
             self.plateau = plateau
         
-        
+    
+    def notDernierJoueur(self):
+        return self.ADV if self.dernierJoueur==self.JOUEUR else self.JOUEUR
+
     def creationMatrice(self): #On crée la matrice et on l'initialise toutes les valeurs à 0.
         self.plateau = []
         for i in range(0, self.tailleColonne):
@@ -41,7 +46,7 @@ class puissance4:
                 
                 p.append(colonne)
             
-            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.derniereCoupJoue)
+            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur)
     
     def termine(self):
             return True if self.fitness(self.JOUEUR) == self.valeurMax or self.fitness(self.ADV) == -self.valeurMax else False
@@ -90,6 +95,15 @@ class puissance4:
             
         return points
         
+    def __str__(self):
+        s = "VISION IA : \n"
+        for i in range(0, self.tailleLigne):
+            s += "\n"
+            for j in range (0, self.tailleColonne):
+               s += str(self.plateau[i][j])+" | "
+        s+='\n'
+        return s
+
     def vecteursDiagolanne(self, joueur):
         vecteurs = []
         for ligne in range(0, self.tailleColonne - 3):
@@ -141,7 +155,7 @@ class puissance4:
         """ Calcule toutes les prochaines actions possibles """
         colonnesJouables = []
         for indexeColonne in range(self.tailleLigne):
-            if self.plateau[self.tailleColonne-1][indexeColonne] == 0:
+            if self.plateau[0][indexeColonne] == 0:
                 colonnesJouables.append(indexeColonne)
         
         coupsJoues = []
@@ -159,14 +173,16 @@ class puissance4:
                 if jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
                     break
-            jeuclone.derniereCoupJoue = colonne
+            jeuclone.dernierCoupJoue = colonne
+            jeuclone.dernierJoueur = joueur
             return jeuclone
         else:
             for indexeLigne in range(self.tailleColonne):
                 if self.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     self.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
                     break
-            self.derniereCoupJoue = colonne
+            self.dernierCoupJoue = colonne
+            self.dernierJoueur = joueur
         return None
 
 

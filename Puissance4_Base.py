@@ -99,32 +99,40 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2"
+idjeu="Alex_vs_IA2409"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
-joueurLocalquiCommence=True
+joueurLocalquiCommence=False
 
 from noeud import noeud
 from minMax import minMax
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    mM = minMax(-10000,10000,puissance4IA,1)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),3)
-    
+    mM = minMax(-50000,50000,puissance4IA,joueurLocal)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
+    puissance4IA.joue(1,colonneChoisie)
+    print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+str(joueurDistant))
+    print(colonneChoisie)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
 
 
 # cette fonction est à remplacer une qui saisie le jeu de l'adversaire à votre IA
 def appliqueJeuAdv(jeu):
+    print(str(jeu))
     puissance4IA.joue(2,jeu)
+    print('Fitness: '+str( puissance4IA.fitness(joueurLocal) )+'   joueur: '+str(joueurLocal))
     print("jeu de l'adversair est ", jeu)
 
+def getJeuAdvLocal():
+    return int(input("Choisissez une colonne: "))
+
+
 from puissance4 import puissance4
-puissance4IA = puissance4(grilleDim,grilleDim,10000)
+puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
 
 if(joueurLocalquiCommence):
     joueurLocal=2
@@ -133,6 +141,19 @@ else:
     joueurLocal=1
     joueurDistant=2
     
+    
+# puissance4IA.joue(1,3)
+# remplirGrille(1,3)
+# puissance4IA.joue(1,2)
+# remplirGrille(1,2)
+# puissance4IA.joue(1,4)
+# remplirGrille(1,4)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
     
 tour=0
 while(True):
@@ -143,13 +164,15 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
-        jeuAdv=loopToGetJeuAdv( 10,idjeu,idjoueurDistant,tour)
+        jeuAdv=getJeuAdvLocal()
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
     else:
-        jeuAdv=loopToGetJeuAdv( 10,idjeu,idjoueurDistant,tour)
+        jeuAdv=getJeuAdvLocal()
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
@@ -162,3 +185,12 @@ while(True):
     tour+=1        
     
 
+# COMMANDES POUR LES TESTS
+from noeud import noeud
+from minMax import minMax
+from puissance4 import puissance4
+puissance4IA = puissance4(10,10,50000)
+mM = minMax(-50000,50000,puissance4IA,1)
+colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
+puissance4IA.joue(1,3)
+puissance4IA.fitness(2)
