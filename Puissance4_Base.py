@@ -99,7 +99,7 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2416"
+idjeu="Alex_vs_IA2023"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
@@ -144,18 +144,18 @@ else:
     joueurDistant=2
     
     
-puissance4IA.joue(1,3)
-remplirGrille(1,3)
-puissance4IA.joue(1,2)
-remplirGrille(1,2)
-puissance4IA.joue(1,4)
-remplirGrille(1,4)
-puissance4IA.joue(2,3)
-remplirGrille(2,3)
-puissance4IA.joue(2,3)
-remplirGrille(2,3)
-puissance4IA.joue(2,3)
-remplirGrille(2,3)
+# puissance4IA.joue(1,9)
+# remplirGrille(1,9)
+# puissance4IA.joue(1,8)
+# remplirGrille(1,8)
+# puissance4IA.joue(1,10)
+# remplirGrille(1,10)
+# puissance4IA.joue(2,9)
+# remplirGrille(2,9)
+# puissance4IA.joue(2,9)
+# remplirGrille(2,9)
+# puissance4IA.joue(2,9)
+# remplirGrille(2,9)
     
 tour=0
 while(True):

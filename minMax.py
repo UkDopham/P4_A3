@@ -85,7 +85,7 @@ class minMax:
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
             if (rang == 4):
-                print('noeud: ',val)
+                print('fitness: ',val)
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
