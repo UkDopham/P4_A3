@@ -82,8 +82,10 @@ class minMax:
         if len(n.enfants)==0:
             print('Pas d enfants!!!!')
         for action in n.enfants: # pour chacuns des ns fils,
-            # print('noeud: ',action.valeur)
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
+                
+            if (rang == 4):
+                print('noeud: ',val)
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande

@@ -18,6 +18,7 @@ class puissance4:
         self.valeurMax = valeurMax
         self.dernierCoupJoue = dernierCoupJoue
         self.dernierJoueur = dernierJoueur
+        self.estTermine = False
             
         if plateau == None :
             self.creationMatrice()
@@ -49,7 +50,8 @@ class puissance4:
             return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur)
     
     def termine(self):
-            return True if self.fitness(self.JOUEUR) == self.valeurMax or self.fitness(self.ADV) == -self.valeurMax else False
+        self.fitness(1)
+        return self.estTermine
         
     def fitness(self, joueur):
         points = 0
@@ -63,7 +65,8 @@ class puissance4:
             
             if p == self.valeurMax:
                 points = self.valeurMax
-                return points
+                self.estTermine = True
+                # return points
             else:
                 points += p
                 
@@ -87,7 +90,8 @@ class puissance4:
             #print("adv p " + str(p))
             if p == self.valeurMax:
                 points = -self.valeurMax
-                return points
+                self.estTermine = True
+                # return points
             else:
                 points -= p
         
