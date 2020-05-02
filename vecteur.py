@@ -15,11 +15,12 @@ class vecteur:
     def points(self, v_max): 
         coordonnees = []
         for i in range(0, len(self.valeurs)):#on recuperer les alignements de jetons
-            if self.valeurs[i] != (self.joueur or 0):
+            # if self.valeurs[i] != (self.joueur or 0): 
+            if self.valeurs[i] == self.joueur or self.valeurs[i] == 0: 
                 coordonnees.append([i, self.valeurs[i]])
-            else:
-                coordonnees = []
-                
+            # else:
+            #     coordonnees = []
+
         points = 0
         if len(coordonnees) >= 4: #on veut compter seulement les schema ooù l'on peut gagner            
             for i in range(0, len(coordonnees)):

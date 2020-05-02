@@ -166,3 +166,12 @@ while(True):
     tour+=1        
     
 
+# COMMANDES POUR LES TESTS
+from noeud import noeud
+from minMax import minMax
+from puissance4 import puissance4
+puissance4IA = puissance4(10,10,50000)
+mM = minMax(-50000,50000,puissance4IA,1)
+colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
+puissance4IA.joue(1,3)
+puissance4IA.fitness(2)
