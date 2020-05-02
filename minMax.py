@@ -42,8 +42,8 @@ class minMax:
 
     def utility(self,n):
         """ recupere la valeur de n.valeur  """
-        return n.valeur.fitness(n.valeur.notDernierJoueur())
-        # return n.valeur.fitness(n.valeur.dernierJoueur)
+        # return n.valeur.fitness(n.valeur.notDernierJoueur())
+        return n.valeur.fitness(self.idJoueur)
 
 
 
@@ -51,7 +51,7 @@ class minMax:
         debutchrono = time.time()
         # if self.maximise:
         print('MAXIMISE')   
-        node, score = self.maxValueAB(n,self.MIN_VAL,self.MAX_VAL, rangMax)
+        node, score = self.maxValueAB(n,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
         # colonne = ""
         # else:
         #     print('MINIMISE')

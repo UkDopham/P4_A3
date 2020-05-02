@@ -142,6 +142,19 @@ else:
     joueurDistant=2
     
     
+# puissance4IA.joue(1,3)
+# remplirGrille(1,3)
+# puissance4IA.joue(1,2)
+# remplirGrille(1,2)
+# puissance4IA.joue(1,4)
+# remplirGrille(1,4)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
+# puissance4IA.joue(2,3)
+# remplirGrille(2,3)
+    
 tour=0
 while(True):
     
@@ -172,12 +185,12 @@ while(True):
     tour+=1        
     
 
-# # COMMANDES POUR LES TESTS
-# from noeud import noeud
-# from minMax import minMax
-# from puissance4 import puissance4
-# puissance4IA = puissance4(10,10,50000)
-# mM = minMax(-50000,50000,puissance4IA,1)
-# colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
-# puissance4IA.joue(1,3)
-# puissance4IA.fitness(2)
+# COMMANDES POUR LES TESTS
+from noeud import noeud
+from minMax import minMax
+from puissance4 import puissance4
+puissance4IA = puissance4(10,10,50000)
+mM = minMax(-50000,50000,puissance4IA,1)
+colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
+puissance4IA.joue(1,3)
+puissance4IA.fitness(2)
