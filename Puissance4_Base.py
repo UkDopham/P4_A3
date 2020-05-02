@@ -99,7 +99,7 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2410"
+idjeu="Alex_vs_IA2413"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
@@ -114,7 +114,7 @@ def monjeu():
     mM = minMax(-50000,50000,puissance4IA,joueurLocal)
     colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
     puissance4IA.joue(1,colonneChoisie)
-    print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+str(joueurDistant))
+    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: '+getNomJoueur(id))
     print(colonneChoisie)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
@@ -124,12 +124,14 @@ def monjeu():
 def appliqueJeuAdv(jeu):
     print(str(jeu))
     puissance4IA.joue(2,jeu)
-    print('Fitness: '+str( puissance4IA.fitness(joueurLocal) )+'   joueur: '+str(joueurLocal))
+    print('Fitness: '+str( puissance4IA.fitness(joueurDistant) )+'   joueur adv: '+getNomJoueur(id))
     print("jeu de l'adversair est ", jeu)
 
 def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
 
+def getNomJoueur(id):
+    return idjoueurLocal if ((joueurLocalquiCommence and id == 2) or (not joueurLocalquiCommence and id == 1) ) else idjoueurDistant
 
 from puissance4 import puissance4
 puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
@@ -142,18 +144,18 @@ else:
     joueurDistant=2
     
     
-# puissance4IA.joue(1,3)
-# remplirGrille(1,3)
-# puissance4IA.joue(1,2)
-# remplirGrille(1,2)
-# puissance4IA.joue(1,4)
-# remplirGrille(1,4)
-# puissance4IA.joue(2,3)
-# remplirGrille(2,3)
-# puissance4IA.joue(2,3)
-# remplirGrille(2,3)
-# puissance4IA.joue(2,3)
-# remplirGrille(2,3)
+puissance4ia.joue(1,3)
+remplirgrille(1,3)
+puissance4ia.joue(1,2)
+remplirgrille(1,2)
+puissance4ia.joue(1,4)
+remplirgrille(1,4)
+puissance4ia.joue(2,3)
+remplirgrille(2,3)
+puissance4ia.joue(2,3)
+remplirgrille(2,3)
+puissance4ia.joue(2,3)
+remplirgrille(2,3)
     
 tour=0
 while(True):
