@@ -105,13 +105,11 @@ idjoueurDistant="Alex"
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
 joueurLocalquiCommence=True
 
-from noeud import noeud
-from minMax import minMax
+
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    mM = minMax(-50000,50000,puissance4IA,joueurLocal, True)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),6)
+    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,6)
     puissance4IA.joue(joueurLocal,colonneChoisie)
     print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: Alex')
     print(colonneChoisie)
@@ -131,16 +129,13 @@ def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
 
 def getJeuAdvLocalIA():
-    mM = minMax(-50000,50000,puissance4IA,joueurDistant, False)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),3)
+    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,3)
     print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+'   joueur ia: Liolio')
     return colonneChoisie
 
 def getNomJoueur(id):
     return idjoueurLocal if ((joueurLocalquiCommence and id == 2) or (not joueurLocalquiCommence and id == 1) ) else idjoueurDistant
 
-from puissance4 import puissance4
-puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
 
 if(joueurLocalquiCommence):
     joueurLocal=2
@@ -149,6 +144,12 @@ else:
     joueurLocal=1
     joueurDistant=2
     
+from puissance4 import puissance4
+puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
+from noeud import noeud
+from minMax import minMax
+mMloc = minMax(-50000,50000,puissance4IA,joueurLocal, True)    
+mMdist = minMax(-50000,50000,puissance4IA,joueurDistant, False)
     
 # puissance4IA.joue(1,9)
 # remplirGrille(1,9)
@@ -165,6 +166,7 @@ else:
     
 tour=0
 while(True):
+ 
     print("tour " + str(tour))
     
     if(joueurLocalquiCommence):
@@ -193,7 +195,6 @@ while(True):
         printGrille()
         
     tour+=1        
-    
 
 # COMMANDES POUR LES TESTS
 from noeud import noeud

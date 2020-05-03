@@ -47,7 +47,6 @@ class minMax:
         """ recupere la valeur de n.valeur  """
         # return n.valeur.fitness(n.valeur.notDernierJoueur())
         return n.valeur.fitness(self.idJoueur, self.points)
-        #return n.valeur.fit
 
 
 
@@ -96,8 +95,8 @@ class minMax:
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
-            if (rang == 4):
-                print('fitness: ',val)
+            #if (rang == 4):
+                #print('fitness: ',val)
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
