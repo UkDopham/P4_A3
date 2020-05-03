@@ -7,11 +7,10 @@ Created on Fri May  1 11:48:58 2020
 
 class vecteur:
     
-    def __init__(self, valeurs, joueur, t, point = False):
+    def __init__(self, valeurs, joueur, t):
         self.valeurs = valeurs
         self.joueur = joueur
         self.t = t
-        self.point = point
     
     def __str__(self):
         content = ""
@@ -20,7 +19,7 @@ class vecteur:
         content = content + " " + self.t + " " + str(self.points(10000))
         return content
     
-    def points(self, v_max): 
+    def points(self, v_max, p): 
         coordonnees = []
         for i in range(0, len(self.valeurs)):#on recuperer les alignements de jetons
             if self.valeurs[i] != self.joueur and self.valeurs[i] != 0:
@@ -33,12 +32,23 @@ class vecteur:
             for i in range(0, len(coordonnees)):
                 if coordonnees[i][1] != 0: # on compte le nb de jetons
                     points += 1
-        if points <= 1:
-            points = 0
-
-        return v_max if points == 4 else (points*points if self.point is True else points)   #v_max pour indiquer que l'on peut gagner ce tours !        
-
         
+            
+        if p == True: 
+            if points < 4:
+                points = 0
+           # if points == 2:
+                #points = 40
+            #elif points ==1:
+                #points = 100
+            #elif points ==3:
+                #points = 5
+        else:
+            if points <= 1:
+                points = 0
+            
+        return v_max if points == 4 else points  #v_max pour indiquer que l'on peut gagner ce tours !        
+
 class rectangle:
 
     def __init__(self,Z,Q,S,D):

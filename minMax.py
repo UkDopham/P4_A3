@@ -16,10 +16,14 @@ class minMax:
     def __init__(self,min,max,plateau,idJoueur, points = True): # utile ?
         self.MIN_VAL = min
         self.MAX_VAL = max
+        self.points = points
         self.s = plateau  # instance du plateau (puissance 4)
         self.idJoueur = idJoueur
+<<<<<<< HEAD
         self.points = points
         self.nPrincipal = noeud(plateau)
+=======
+>>>>>>> 09b78028ae4e269be7940012d31413ce73aa0bff
 
 
     # n.valeur = instance du plateau de jeu (puissance4)
@@ -91,8 +95,8 @@ class minMax:
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
-            if (rang == 4):
-                print('fitness: ',val)
+            #if (rang == 4):
+                #print('fitness: ',val)
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
