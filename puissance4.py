@@ -202,7 +202,7 @@ class puissance4:
             for indexeLigne in range(self.tailleColonne):
                 if jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
-                    jeuclone.adapteLimite(colonne,indexeLigne)
+                    jeuclone.adapteLimite(colonne,self.tailleColonne-1-indexeLigne)
                     break
             jeuclone.dernierCoupJoue = colonne
             jeuclone.dernierJoueur = joueur
@@ -211,7 +211,7 @@ class puissance4:
             for indexeLigne in range(self.tailleColonne):
                 if self.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     self.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
-                    self.adapteLimite(colonne,indexeLigne)
+                    self.adapteLimite(colonne,self.tailleColonne-1-indexeLigne)
                     break
             self.dernierCoupJoue = colonne
             self.dernierJoueur = joueur
@@ -224,8 +224,8 @@ class puissance4:
             self.limites.Q = x
         if x >= self.limites.D :
             self.limites.D = x+1
-        if y >= self.limites.S :
-            self.limites.S = y+1
+        if y < self.limites.S :
+            self.limites.S = y
         # pas necessaire de le faire pour la borne inferieure
 
         if self.limites.D -self.limites.Q <4:

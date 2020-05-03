@@ -64,6 +64,10 @@ class minMax:
         finchrono = time.time()
         print("( temps ecoule: ", str(round(finchrono - debutchrono, 3)),')')
 
+        if score > 10000 :
+            print("IA : J'AI GAGNE!!!")
+        elif score < -10000:
+            print("IA : J'AI PERDU ...") 
         return colonne, score
 
 
@@ -89,7 +93,7 @@ class minMax:
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
-            if v >= beta or v >1000:
+            if v >= beta :
                 # if ( beta >1000):
                 #     print("beta: ",beta,"  - ", str(v >= beta ))
                 return node,v   # puis la retourne
@@ -112,7 +116,7 @@ class minMax:
             if val <= v:
                 node = action
             v = min(v,val)
-            if v <= alpha or v <-1000:
+            if v <= alpha :
                 # if alpha <-1000:
                 #     print("alpha: ",alpha,"  - ", str(v <= alpha )) 
                 return node,v
