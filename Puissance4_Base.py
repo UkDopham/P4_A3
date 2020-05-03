@@ -113,9 +113,10 @@ from minMax import minMax
 def monjeu():
     mM = minMax(-50000,50000,puissance4IA,joueurLocal)
     colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
-    puissance4IA.joue(1,colonneChoisie)
+    puissance4IA.joue(joueurLocal,colonneChoisie)
     print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: '+getNomJoueur(id))
     print(colonneChoisie)
+    print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
 
@@ -123,7 +124,7 @@ def monjeu():
 # cette fonction est à remplacer une qui saisie le jeu de l'adversaire à votre IA
 def appliqueJeuAdv(jeu):
     print(str(jeu))
-    puissance4IA.joue(2,jeu)
+    puissance4IA.joue(joueurDistant,jeu)
     print('Fitness: '+str( puissance4IA.fitness(joueurDistant) )+'   joueur adv: '+getNomJoueur(id))
     print("jeu de l'adversair est ", jeu)
 
@@ -166,15 +167,15 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
-        #jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        jeuAdv=getJeuAdvLocal()
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
     else:
-        #jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        jeuAdv=getJeuAdvLocal()
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
@@ -196,3 +197,5 @@ mM = minMax(-50000,50000,puissance4IA,1)
 colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
 puissance4IA.joue(1,3)
 puissance4IA.fitness(1)
+print(puissance4IA)
+print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)

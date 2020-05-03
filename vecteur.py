@@ -37,3 +37,10 @@ class vecteur:
         return v_max if points == 4 else points    #v_max pour indiquer que l'on peut gagner ce tours !        
             
         
+class rectangle:
+
+    def __init__(self,Z,Q,S,D):
+        self.Z = Z # haut
+        self.Q = Q # gauche
+        self.S = S # bas
+        self.D = D # droite

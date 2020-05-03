@@ -6,19 +6,23 @@ Created on Sat Apr 25 11:55:54 2020
 """
 
 from vecteur import vecteur
+from vecteur import rectangle
 
 class puissance4:
     
     JOUEUR = 1
     ADV = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
         self.dernierCoupJoue = dernierCoupJoue
         self.dernierJoueur = dernierJoueur
         self.estTermine = False
+        self.limites = limites
+        if limites == None:
+            self.limites = rectangle(tailleColonne,tailleLigne,tailleColonne-4,0) # MaxSup,Gauche,MinBas,Droite
             
         if plateau == None :
             self.creationMatrice()
@@ -47,7 +51,7 @@ class puissance4:
                 
                 p.append(colonne)
             
-            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur)
+            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur,rectangle(self.limites.Z,self.limites.Q,self.limites.S,self.limites.D))
     
     def termine(self):
         self.fitness(1)
@@ -110,17 +114,22 @@ class puissance4:
 
     def vecteursDiagolanne(self, joueur):
         vecteurs = []
-        for ligne in range(0, self.tailleColonne - 3):
-            for colonne in range(0, self.tailleLigne - 3):
+
+        for ligne in range(self.limites.S, self.limites.Z-3):
+        # for ligne in range(0, self.tailleColonne - 3):
+            for colonne in range(self.limites.Q, self.limites.D-3):
+            # for colonne in range(0, self.tailleLigne - 3):
                 v = []
                 v.append(self.plateau[ligne][colonne])
                 v.append(self.plateau[ligne + 1][colonne + 1])
                 v.append(self.plateau[ligne + 2][colonne + 2])
                 v.append(self.plateau[ligne + 3][colonne + 3])
                 vecteurs.append(vecteur(v, joueur, "diago"))
-                
-        for ligne in range(self.tailleColonne - 1, 2, -1):
-            for colonne in range(0, self.tailleLigne - 3):
+        
+        for ligne in range(self.limites.Z-1,self.limites.S +2,-1):
+        # for ligne in range(self.tailleColonne - 1, 2, -1):
+            for colonne in range(self.limites.Q, self.limites.D-3):
+            # for colonne in range(0, self.tailleLigne - 3):
                 v = []
                 v.append(self.plateau[ligne][colonne])
                 v.append(self.plateau[ligne - 1][colonne + 1])                
@@ -133,20 +142,26 @@ class puissance4:
         
     def vecteursColonne(self, joueur):
         vecteurs = []
-        for colonne in range(0, self.tailleLigne):
-            for ligne in range(0, self.tailleColonne - 3):
+
+        for colonne in range(self.limites.Q, self.limites.D):
+        # for colonne in range(0, self.tailleLigne):
+            for ligne in range(self.limites.S, self.limites.Z-3):
+            # for ligne in range(0, self.tailleColonne-3):
                 v = []
                 v.append(self.plateau[ligne][colonne])
                 v.append(self.plateau[ligne + 1][colonne])
                 v.append(self.plateau[ligne + 2][colonne])
                 v.append(self.plateau[ligne + 3][colonne])
                 vecteurs.append(vecteur(v, joueur, "colonne"))
+ 
         return vecteurs
             
     def vecteursLigne(self, joueur):
         vecteurs = []
-        for ligne in range(0, len(self.plateau)):
-            for colonne in range(0, len(self.plateau[ligne]) - 3):
+        for ligne in range(self.limites.S, self.limites.Z):
+        # for ligne in range(0, self.tailleColonne):
+            for colonne in range(self.limites.Q, self.limites.D-3):
+            # for colonne in range(0, self.tailleLigne - 3):
                 v = []
                 v.append(self.plateau[ligne][colonne])
                 v.append(self.plateau[ligne][colonne + 1])
@@ -187,6 +202,7 @@ class puissance4:
             for indexeLigne in range(self.tailleColonne):
                 if jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     jeuclone.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
+                    jeuclone.adapteLimite(colonne,indexeLigne)
                     break
             jeuclone.dernierCoupJoue = colonne
             jeuclone.dernierJoueur = joueur
@@ -195,10 +211,26 @@ class puissance4:
             for indexeLigne in range(self.tailleColonne):
                 if self.plateau[self.tailleColonne-1-indexeLigne][colonne] == 0:
                     self.plateau[self.tailleColonne-1-indexeLigne][colonne] = joueur
+                    self.adapteLimite(colonne,indexeLigne)
                     break
             self.dernierCoupJoue = colonne
             self.dernierJoueur = joueur
         return None
 
 
+    def adapteLimite(self,x,y):
+        """ Adapte les limites du rectangle dans lequel sont cherche vecteurs """
+        if x < self.limites.Q :
+            self.limites.Q = x
+        if x >= self.limites.D :
+            self.limites.D = x+1
+        if y >= self.limites.S :
+            self.limites.S = y+1
+        # pas necessaire de le faire pour la borne inferieure
 
+        if self.limites.D -self.limites.Q <4:
+            if self.limites.Q-4 < 0:
+                self.limites.D=self.limites.Q+4
+            else:
+                self.limites.Q=self.limites.D-4
+        # print('Limite: ',self.limites.Z,' ',self.limites.Q,' ',self.limites.S,' ',self.limites.D)
