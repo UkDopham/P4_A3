@@ -99,12 +99,12 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2023"
+idjeu="Alex_vs_IA2050"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
-joueurLocalquiCommence=False
+joueurLocalquiCommence=True
 
 from noeud import noeud
 from minMax import minMax
@@ -114,9 +114,9 @@ def monjeu():
     mM = minMax(-50000,50000,puissance4IA,joueurLocal)
     colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
     puissance4IA.joue(joueurLocal,colonneChoisie)
-    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: '+getNomJoueur(id))
-    print(colonneChoisie)
-    print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
+    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: '+getNomJoueur(joueurLocal))
+    # print(colonneChoisie)
+    # print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
 
@@ -125,11 +125,17 @@ def monjeu():
 def appliqueJeuAdv(jeu):
     print(str(jeu))
     puissance4IA.joue(joueurDistant,jeu)
-    print('Fitness: '+str( puissance4IA.fitness(joueurDistant) )+'   joueur adv: '+getNomJoueur(id))
+    print('Fitness: '+str( puissance4IA.fitness(joueurDistant) )+'   joueur adv: '+getNomJoueur(joueurDistant))
     print("jeu de l'adversair est ", jeu)
 
 def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
+
+def getJeuAdvLocalIA():
+    mM = minMax(-50000,50000,puissance4IA,joueurDistant)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
+    print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+'   joueur ia: '+getNomJoueur(joueurDistant))
+    return colonneChoisie
 
 def getNomJoueur(id):
     return idjoueurLocal if ((joueurLocalquiCommence and id == 2) or (not joueurLocalquiCommence and id == 1) ) else idjoueurDistant
@@ -167,14 +173,16 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
-        jeuAdv=getJeuAdvLocal()
+        jeuAdv=getJeuAdvLocalIA()
+        # jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
     else:
-        jeuAdv=getJeuAdvLocal()
+        jeuAdv=getJeuAdvLocalIA()
+        # jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)

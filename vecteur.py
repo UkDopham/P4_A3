@@ -34,7 +34,7 @@ class vecteur:
                     points += 1
         if points <= 1:
             points = 0
-        return v_max if points == 4 else points*points    #v_max pour indiquer que l'on peut gagner ce tours !        
+        return v_max if points == 4 else points  #*points    v_max pour indiquer que l'on peut gagner ce tours !        
             
         
 class rectangle:
