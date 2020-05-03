@@ -43,15 +43,16 @@ def loopToGetJeuAdv( inetvalle,idjeu,idAdv,tour,server=servergame):
     return advJeu
 
 def remplirGrille(joueur, jeu):
-    for i in range(grilleDim-1,-1,-1):
+    print("jeu " + str(jeu))
+    for i in range(grilleLigne-1,-1,-1):
         if(grille[i][jeu]==0):
             grille[i][jeu]=joueur
             break
             
 def printGrille():
-    for i in range(grilleDim):
+    for i in range(grilleLigne):
         print("|",end=' ')
-        for j in range(grilleDim):
+        for j in range(grilleColonne):
             if(grille[i][j]==1):
                 print(CBLUE+'0'+CEND,end=' ')
             elif grille[i][j]==2:
@@ -61,12 +62,12 @@ def printGrille():
             print("|",end=' ')
         print()
     print("|",end=' ')
-    for i in range(grilleDim):
+    for i in range(grilleColonne):
         print("_",end=" ")
         print("|",end=' ')
     print()
     print("|",end=' ')
-    for i in range(grilleDim):
+    for i in range(grilleColonne):
         print(i%10,end=" ")
         print("|",end=' ')
     print()
@@ -93,8 +94,9 @@ def printGrille():
 
 
 
-grilleDim=12
-grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
+grilleColonne = 12
+grilleLigne = 6
+grille=np.zeros((grilleLigne, grilleColonne),dtype=np.byte)
 
 
 
@@ -109,7 +111,7 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,6)
+    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,3)
     puissance4IA.joue(joueurLocal,colonneChoisie)
     print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: Alex')
     print(colonneChoisie)
@@ -145,7 +147,7 @@ else:
     joueurDistant=2
     
 from puissance4 import puissance4
-puissance4IA = puissance4(grilleDim,grilleDim,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
+puissance4IA = puissance4(grilleColonne,grilleLigne,50000, dernierJoueur= 1 if joueurLocalquiCommence else 2)
 from noeud import noeud
 from minMax import minMax
 mMloc = minMax(-50000,50000,puissance4IA,joueurLocal, True)    
@@ -200,7 +202,7 @@ while(True):
 from noeud import noeud
 from minMax import minMax
 from puissance4 import puissance4
-puissance4IA = puissance4(12,12,50000)
+puissance4IA = puissance4(12,6,50000)
 mM = minMax(-50000,50000,puissance4IA,1)
 colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
 puissance4IA.joue(1,3)
