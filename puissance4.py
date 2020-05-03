@@ -48,9 +48,9 @@ class puissance4:
             
     def clone(self): #on crée une nouvelle instance de la classe puissance4
             p = []
-            for i in range(0, self.tailleLigne):
+            for i in range(0, self.tailleColonne):
                 colonne = []
-                for j in range (0, self.tailleColonne):
+                for j in range (0, self.tailleLigne):
                     colonne.append(self.plateau[i][j])
                 
                 p.append(colonne)
