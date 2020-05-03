@@ -19,11 +19,8 @@ class minMax:
         self.points = points
         self.s = plateau  # instance du plateau (puissance 4)
         self.idJoueur = idJoueur
-<<<<<<< HEAD
         self.points = points
         self.nPrincipal = noeud(plateau)
-=======
->>>>>>> 09b78028ae4e269be7940012d31413ce73aa0bff
 
 
     # n.valeur = instance du plateau de jeu (puissance4)
@@ -53,20 +50,23 @@ class minMax:
 
 
 
-    def minimax_Decision_AlphaBeta(self, n, rangMax):
+    def minimax_Decision_AlphaBeta(self,puissance4, rangMax):
         debutchrono = time.time()
         # if self.maximise:
         print('MAXIMISE')   
-        if self.nPrincipal.valeur.dernierCoupJoue != None: # on update la position de la node selon le dernier coup de l'adversaire
-            self.nPrincipal = self.nPrincipal.enfants[self.nPrincipal.valeur.dernierCoupJoue] 
+        if puissance4.dernierCoupJoue != None and len(self.nPrincipal.enfants)!=0: # on update la position de la node selon le dernier coup de l'adversaire
+            
+            self.nPrincipal = self.nPrincipal.enfants[puissance4.dernierCoupJoue] 
 
-
+        
         node, score = self.maxValueAB(self.nPrincipal,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
 
         print('Score trouvee: ',score)
         colonne = node.valeur.dernierCoupJoue
         print('colonne a jouer: ',colonne)
-        self.nPrincipal = n.enfants[colonne]
+
+
+        self.nPrincipal = node
   
         finchrono = time.time()
         print("( temps ecoule: ", str(round(finchrono - debutchrono, 3)),')')
@@ -90,13 +90,13 @@ class minMax:
             return None, self.utility(n)
         v = self.MIN_VAL
         node = None
-        if len(n.enfants) == 0:
-            self.actions(n)
+        # if len(n.enfants) == 0:
+        self.actions(n)
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
-            #if (rang == 4):
-                #print('fitness: ',val)
+            if (rang == 4):
+                print('fitness: ',val)
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
@@ -115,8 +115,8 @@ class minMax:
             return None, self.utility(n)
         v = self.MAX_VAL
         node = None
-        if len(n.enfants) == 0:
-            self.actions(n)
+        # if len(n.enfants) == 0:
+        self.actions(n)
         for action in n.enfants:
             nd, val = self.maxValueAB(action,alpha,beta,rang-1)
             if val <= v:
