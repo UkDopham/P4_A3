@@ -45,6 +45,7 @@ class minMax:
         """ recupere la valeur de n.valeur  """
         # return n.valeur.fitness(n.valeur.notDernierJoueur())
         return n.valeur.fitness(self.idJoueur, self.points)
+        #return n.valeur.fit
 
 
 

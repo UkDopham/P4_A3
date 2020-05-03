@@ -13,6 +13,7 @@ class puissance4:
     JOUEUR = 1
     ADV = 2
     POIDS = 2
+    SEUIL = 4
     
     def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
         self.tailleLigne = tailleLigne
@@ -22,6 +23,7 @@ class puissance4:
         self.dernierJoueur = dernierJoueur
         self.estTermine = False
         self.limites = limites
+        self.fit = 0
         if limites == None:
             self.limites = rectangle(tailleColonne,tailleLigne,tailleColonne-4,0) # MaxSup,Gauche,MinBas,Droite
             
@@ -100,7 +102,6 @@ class puissance4:
             else:
                 points -= p        
         
-            
         return points
         
     def __str__(self):
@@ -120,22 +121,26 @@ class puissance4:
             for colonne in range(self.limites.Q, self.limites.D-3):
             # for colonne in range(0, self.tailleLigne - 3):
                 v = []
-                v.append(self.plateau[ligne][colonne])
-                v.append(self.plateau[ligne + 1][colonne + 1])
-                v.append(self.plateau[ligne + 2][colonne + 2])
-                v.append(self.plateau[ligne + 3][colonne + 3])
-                vecteurs.append(vecteur(v, joueur, "diago"))
+                for i in range(0, 4):
+                    p = self.plateau[ligne + i][colonne + i]
+                    if p == 0 or p == joueur:                        
+                        v.append(p)
+                
+                if len(v) >= self.SEUIL:
+                    vecteurs.append(vecteur(v, joueur, "diago"))
         
         for ligne in range(self.limites.Z-1,self.limites.S +2,-1):
         # for ligne in range(self.tailleColonne - 1, 2, -1):
             for colonne in range(self.limites.Q, self.limites.D-3):
             # for colonne in range(0, self.tailleLigne - 3):
                 v = []
-                v.append(self.plateau[ligne][colonne])
-                v.append(self.plateau[ligne - 1][colonne + 1])                
-                v.append(self.plateau[ligne - 2][colonne + 2])
-                v.append(self.plateau[ligne - 3][colonne + 3])
-                vecteurs.append(vecteur(v, joueur, "diago"))
+                for i in range(0, 4):
+                    p = self.plateau[ligne - i][colonne - i]
+                    if p == 0 or p == joueur:                        
+                        v.append(p)
+                
+                if len(v) >= self.SEUIL:
+                    vecteurs.append(vecteur(v, joueur, "diago"))
         
         
         return vecteurs
@@ -148,11 +153,13 @@ class puissance4:
             for ligne in range(self.limites.S, self.limites.Z-3):
             # for ligne in range(0, self.tailleColonne-3):
                 v = []
-                v.append(self.plateau[ligne][colonne])
-                v.append(self.plateau[ligne + 1][colonne])
-                v.append(self.plateau[ligne + 2][colonne])
-                v.append(self.plateau[ligne + 3][colonne])
-                vecteurs.append(vecteur(v, joueur, "colonne"))
+                for i in range(0, 4):
+                    p = self.plateau[ligne + i][colonne]
+                    if p == 0 or p == joueur:                        
+                        v.append(p)
+                        
+                if len(v) >= self.SEUIL:
+                    vecteurs.append(vecteur(v, joueur, "colonne"))
  
         return vecteurs
             
@@ -163,11 +170,13 @@ class puissance4:
             for colonne in range(self.limites.Q, self.limites.D-3):
             # for colonne in range(0, self.tailleLigne - 3):
                 v = []
-                v.append(self.plateau[ligne][colonne])
-                v.append(self.plateau[ligne][colonne + 1])
-                v.append(self.plateau[ligne][colonne + 2])
-                v.append(self.plateau[ligne][colonne + 3])
-                vecteurs.append(vecteur(v, joueur, "ligne"))
+                for i in range(0, 4):
+                    p = self.plateau[ligne][colonne + i]
+                    if p == 0 or p == joueur:                        
+                        v.append(p)
+                
+                if len(v) >= self.SEUIL:
+                    vecteurs.append(vecteur(v, joueur, "ligne"))
             
         return vecteurs
         
@@ -206,6 +215,7 @@ class puissance4:
                     break
             jeuclone.dernierCoupJoue = colonne
             jeuclone.dernierJoueur = joueur
+            #self.fit = self.fitness(joueur)
             return jeuclone
         else:
             for indexeLigne in range(self.tailleColonne):
@@ -215,6 +225,7 @@ class puissance4:
                     break
             self.dernierCoupJoue = colonne
             self.dernierJoueur = joueur
+            #self.fit = self.fitness(joueur)
         return None
 
 
