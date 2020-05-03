@@ -109,9 +109,9 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,6)
+    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,4)
     puissance4IA.joue(joueurLocal,colonneChoisie)
-    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: Alex')
+    print('Fitness: '+str(puissance4IA.fit)+'   joueur ia: Alex')
     print(colonneChoisie)
     print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
     return colonneChoisie
@@ -122,15 +122,15 @@ def monjeu():
 def appliqueJeuAdv(jeu):
     print(str(jeu))
     puissance4IA.joue(joueurDistant,jeu)
-    print('Fitness: '+str( puissance4IA.fitness(joueurDistant) )+'   joueur adv: '+getNomJoueur(id))
+    print('Fitness: '+str( puissance4IA.fit)+'   joueur adv: '+getNomJoueur(id))
     print("jeu de l'adversair est ", jeu)
 
 def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
 
 def getJeuAdvLocalIA():
-    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,3)
-    print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+'   joueur ia: Liolio')
+    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,4)
+    print('Fitness: '+str(puissance4IA.fit)+'   joueur ia: Liolio')
     return colonneChoisie
 
 def getNomJoueur(id):
@@ -168,7 +168,7 @@ tour=0
 while(True):
  
     print("tour " + str(tour))
-    
+        
     if(joueurLocalquiCommence):
         jeu=monjeu()
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
@@ -194,7 +194,10 @@ while(True):
         remplirGrille(joueurLocal,jeu)
         printGrille()
         
-    tour+=1        
+    tour+=1   
+
+    # print('Nombres d executions de fitness: ',puissance4.CPT)  
+    # input()   
 
 # COMMANDES POUR LES TESTS
 from noeud import noeud

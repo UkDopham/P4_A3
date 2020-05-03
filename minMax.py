@@ -47,6 +47,7 @@ class minMax:
         """ recupere la valeur de n.valeur  """
         # return n.valeur.fitness(n.valeur.notDernierJoueur())
         return n.valeur.fitness(self.idJoueur, self.points)
+        # return n.valeur.fit
 
 
 
@@ -55,8 +56,10 @@ class minMax:
         # if self.maximise:
         print('MAXIMISE')   
         if puissance4.dernierCoupJoue != None and len(self.nPrincipal.enfants)!=0: # on update la position de la node selon le dernier coup de l'adversaire
-            
-            self.nPrincipal = self.nPrincipal.enfants[puissance4.dernierCoupJoue] 
+            self.nPrincipal = self.nPrincipal.enfants[puissance4.dernierCoupJoue]
+            # print(self.nPrincipal.valeur) 
+            print("ON AVANCE DANS L ARBRE")
+            # input()
 
         
         node, score = self.maxValueAB(self.nPrincipal,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
@@ -71,9 +74,9 @@ class minMax:
         finchrono = time.time()
         print("( temps ecoule: ", str(round(finchrono - debutchrono, 3)),')')
 
-        if score > 10000 :
+        if score > 20000 :
             print("IA : J'AI GAGNE!!!")
-        elif score < -10000:
+        elif score < -20000:
             print("IA : J'AI PERDU ...") 
         return colonne, score
 
@@ -90,8 +93,12 @@ class minMax:
             return None, self.utility(n)
         v = self.MIN_VAL
         node = None
-        # if len(n.enfants) == 0:
-        self.actions(n)
+        if len(n.enfants) == 0:
+            self.actions(n)
+        # else:
+        #     print("Pas de creation de nouveaux")
+        #     input()
+    
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
@@ -115,8 +122,12 @@ class minMax:
             return None, self.utility(n)
         v = self.MAX_VAL
         node = None
-        # if len(n.enfants) == 0:
-        self.actions(n)
+        if len(n.enfants) == 0:
+            self.actions(n)
+        # else:
+        #     print("Pas de creation de nouveaux")
+        #     input()
+        
         for action in n.enfants:
             nd, val = self.maxValueAB(action,alpha,beta,rang-1)
             if val <= v:

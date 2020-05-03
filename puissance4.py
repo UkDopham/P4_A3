@@ -9,7 +9,7 @@ from vecteur import vecteur
 from vecteur import rectangle
 
 class puissance4:
-    
+    CPT =0
     JOUEUR = 1
     ADV = 2
     POIDS = 2
@@ -21,9 +21,10 @@ class puissance4:
         self.valeurMax = valeurMax
         self.dernierCoupJoue = dernierCoupJoue
         self.dernierJoueur = dernierJoueur
-        self.estTermine = False
+        self.estTermine = None
+        self.fit = None
         self.limites = limites
-        self.fit = 0
+        
         if limites == None:
             self.limites = rectangle(tailleColonne,tailleLigne,tailleColonne-4,0) # MaxSup,Gauche,MinBas,Droite
             
@@ -57,10 +58,15 @@ class puissance4:
             return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur,rectangle(self.limites.Z,self.limites.Q,self.limites.S,self.limites.D))
     
     def termine(self):
-        self.fitness(1)
+        if self.termine == None:
+            self.fitness(1)
+        # self.fitness(1)
         return self.estTermine
         
     def fitness(self, joueur, points = False):
+        if (self.fit != None):
+            return self.fit
+        # puissance4.CPT+=1
         points = 0
         adv = self.ADV if joueur == self.JOUEUR else self.JOUEUR
         v_joueur = self.vecteursLigne(joueur) #alignement jetons du joueur
@@ -215,7 +221,7 @@ class puissance4:
                     break
             jeuclone.dernierCoupJoue = colonne
             jeuclone.dernierJoueur = joueur
-            #self.fit = self.fitness(joueur)
+            # jeuclone.fit = jeuclone.fitness(joueurFitness)
             return jeuclone
         else:
             for indexeLigne in range(self.tailleColonne):
@@ -225,8 +231,8 @@ class puissance4:
                     break
             self.dernierCoupJoue = colonne
             self.dernierJoueur = joueur
-            #self.fit = self.fitness(joueur)
-        return None
+            # self.fit = self.fitness(joueurFitness)
+            return None
 
 
     def adapteLimite(self,x,y):
