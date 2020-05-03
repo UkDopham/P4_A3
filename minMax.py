@@ -13,11 +13,13 @@ class minMax:
     MIN_VAL = -1000000
     MAX_VAL = 1000000
     
-    def __init__(self,min,max,plateau,idJoueur): # utile ?
+    def __init__(self,min,max,plateau,idJoueur, points = True): # utile ?
         self.MIN_VAL = min
         self.MAX_VAL = max
         self.s = plateau  # instance du plateau (puissance 4)
         self.idJoueur = idJoueur
+        self.points = points
+        self.nPrincipal = noeud(plateau)
 
 
     # n.valeur = instance du plateau de jeu (puissance4)
@@ -43,7 +45,7 @@ class minMax:
     def utility(self,n):
         """ recupere la valeur de n.valeur  """
         # return n.valeur.fitness(n.valeur.notDernierJoueur())
-        return n.valeur.fitness(self.idJoueur)
+        return n.valeur.fitness(self.idJoueur, self.points)
 
 
 
@@ -51,15 +53,16 @@ class minMax:
         debutchrono = time.time()
         # if self.maximise:
         print('MAXIMISE')   
-        node, score = self.maxValueAB(n,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
-        # colonne = ""
-        # else:
-        #     print('MINIMISE')
-        #     self.node, val = self.MinValueAB(self.node,self.MIN_VAL,self.MAX_VAL, rangMax)
-        
+        if self.nPrincipal.valeur.dernierCoupJoue != None: # on update la position de la node selon le dernier coup de l'adversaire
+            self.nPrincipal = self.nPrincipal.enfants[self.nPrincipal.valeur.dernierCoupJoue] 
+
+
+        node, score = self.maxValueAB(self.nPrincipal,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
+
         print('Score trouvee: ',score)
         colonne = node.valeur.dernierCoupJoue
         print('colonne a jouer: ',colonne)
+        self.nPrincipal = n.enfants[colonne]
   
         finchrono = time.time()
         print("( temps ecoule: ", str(round(finchrono - debutchrono, 3)),')')
@@ -74,6 +77,7 @@ class minMax:
 
 
     def maxValueAB(self,n,alpha,beta,rang=0):
+
         # print('maxValueAB')
         if  rang == 0 or self.terminialTest(n) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
             # print(self.utility(n))
@@ -82,9 +86,8 @@ class minMax:
             return None, self.utility(n)
         v = self.MIN_VAL
         node = None
-        self.actions(n)
-        if len(n.enfants)==0:
-            print('Pas d enfants!!!!')
+        if len(n.enfants) == 0:
+            self.actions(n)
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
                 
@@ -108,9 +111,8 @@ class minMax:
             return None, self.utility(n)
         v = self.MAX_VAL
         node = None
-        self.actions(n)
-        if len(n.enfants)==0:
-            print('Pas d enfants!!!!')
+        if len(n.enfants) == 0:
+            self.actions(n)
         for action in n.enfants:
             nd, val = self.maxValueAB(action,alpha,beta,rang-1)
             if val <= v:
