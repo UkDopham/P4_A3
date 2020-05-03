@@ -99,9 +99,9 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2023"
-idjoueurLocal="IA"
-idjoueurDistant="Alex"
+idjeu="Alex_vs_IA2051"
+idjoueurLocal="Alex"
+idjoueurDistant="IA"
 
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
 joueurLocalquiCommence=False
@@ -167,15 +167,15 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
-        jeuAdv=getJeuAdvLocal()
-        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        #jeuAdv=getJeuAdvLocal()
+        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
     else:
-        jeuAdv=getJeuAdvLocal()
-        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        #jeuAdv=getJeuAdvLocal()
+        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)

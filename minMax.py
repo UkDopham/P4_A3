@@ -13,11 +13,12 @@ class minMax:
     MIN_VAL = -1000000
     MAX_VAL = 1000000
     
-    def __init__(self,min,max,plateau,idJoueur): # utile ?
+    def __init__(self,min,max,plateau,idJoueur, points = True): # utile ?
         self.MIN_VAL = min
         self.MAX_VAL = max
         self.s = plateau  # instance du plateau (puissance 4)
         self.idJoueur = idJoueur
+        self.points = points
 
 
     # n.valeur = instance du plateau de jeu (puissance4)
@@ -43,7 +44,7 @@ class minMax:
     def utility(self,n):
         """ recupere la valeur de n.valeur  """
         # return n.valeur.fitness(n.valeur.notDernierJoueur())
-        return n.valeur.fitness(self.idJoueur)
+        return n.valeur.fitness(self.idJoueur, self.points)
 
 
 

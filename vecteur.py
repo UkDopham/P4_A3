@@ -7,10 +7,11 @@ Created on Fri May  1 11:48:58 2020
 
 class vecteur:
     
-    def __init__(self, valeurs, joueur, t):
+    def __init__(self, valeurs, joueur, t, point = False):
         self.valeurs = valeurs
         self.joueur = joueur
         self.t = t
+        self.point = point
     
     def __str__(self):
         content = ""
@@ -34,7 +35,7 @@ class vecteur:
                     points += 1
         if points <= 1:
             points = 0
-        return v_max if points == 4 else points*points    #v_max pour indiquer que l'on peut gagner ce tours !        
+        return v_max if points == 4 else (points*points if self.point is True else points)   #v_max pour indiquer que l'on peut gagner ce tours !        
             
         
 class rectangle:

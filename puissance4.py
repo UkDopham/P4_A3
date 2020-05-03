@@ -14,7 +14,7 @@ class puissance4:
     ADV = 2
     POIDS = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None, points = True):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
@@ -22,6 +22,7 @@ class puissance4:
         self.dernierJoueur = dernierJoueur
         self.estTermine = False
         self.limites = limites
+        self.points = points
         if limites == None:
             self.limites = rectangle(tailleColonne,tailleLigne,tailleColonne-4,0) # MaxSup,Gauche,MinBas,Droite
             
@@ -66,7 +67,7 @@ class puissance4:
         v_joueur.extend(self.vecteursDiagolanne(joueur))
         
         for i in range(0, len(v_joueur)):
-            p =  v_joueur[i].points(self.valeurMax)
+            p =  v_joueur[i].points(self.valeurMax, self.points)
             
             if p == self.valeurMax:
                 points = self.valeurMax
@@ -91,7 +92,7 @@ class puissance4:
          #   print(v_adver[i])
             
         for i in range(0, len(v_adver)):
-            p = v_adver[i].points(self.valeurMax)
+            p = v_adver[i].points(self.valeurMax, self.points)
             #print("adv p " + str(p))
             if p == self.valeurMax:
                 points = -self.valeurMax
