@@ -12,6 +12,7 @@ class puissance4:
     
     JOUEUR = 1
     ADV = 2
+    POIDS = 2
     
     def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
         self.tailleLigne = tailleLigne
@@ -97,8 +98,7 @@ class puissance4:
                 self.estTermine = True
                 # return points
             else:
-                points -= p
-        
+                points -= p        
         
             
         return points
