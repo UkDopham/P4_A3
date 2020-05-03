@@ -99,22 +99,21 @@ grille=np.zeros((grilleDim,grilleDim),dtype=np.byte)
 
 
 #idjeu est un id unique, si vous abondonnez une partie, pensez à créer un nouveau idjeu
-idjeu="Alex_vs_IA2051"
-idjoueurLocal="Alex"
-idjoueurDistant="IA"
-
+idjeu="Alex_vs_IA20421"
+idjoueurLocal="IA"
+idjoueurDistant="Alex"
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
-joueurLocalquiCommence=False
+joueurLocalquiCommence=True
 
 from noeud import noeud
 from minMax import minMax
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    mM = minMax(-50000,50000,puissance4IA,joueurLocal)
+    mM = minMax(-50000,50000,puissance4IA,joueurLocal, True)
     colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
     puissance4IA.joue(joueurLocal,colonneChoisie)
-    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: '+getNomJoueur(id))
+    print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: Alex')
     print(colonneChoisie)
     print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
     return colonneChoisie
@@ -130,6 +129,12 @@ def appliqueJeuAdv(jeu):
 
 def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
+
+def getJeuAdvLocalIA():
+    mM = minMax(-50000,50000,puissance4IA,joueurDistant, False)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),5)
+    print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+'   joueur ia: Liolio')
+    return colonneChoisie
 
 def getNomJoueur(id):
     return idjoueurLocal if ((joueurLocalquiCommence and id == 2) or (not joueurLocalquiCommence and id == 1) ) else idjoueurDistant
@@ -160,22 +165,24 @@ else:
     
 tour=0
 while(True):
-    
+    print("tour " + str(tour))
     
     if(joueurLocalquiCommence):
         jeu=monjeu()
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
+        jeuAdv = getJeuAdvLocalIA()
         #jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
     else:
+        jeuAdv = getJeuAdvLocalIA()
         #jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)

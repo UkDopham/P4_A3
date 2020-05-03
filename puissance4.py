@@ -14,7 +14,7 @@ class puissance4:
     ADV = 2
     POIDS = 2
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None, points = True):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
@@ -22,7 +22,6 @@ class puissance4:
         self.dernierJoueur = dernierJoueur
         self.estTermine = False
         self.limites = limites
-        self.points = points
         if limites == None:
             self.limites = rectangle(tailleColonne,tailleLigne,tailleColonne-4,0) # MaxSup,Gauche,MinBas,Droite
             
@@ -59,7 +58,7 @@ class puissance4:
         self.fitness(1)
         return self.estTermine
         
-    def fitness(self, joueur):
+    def fitness(self, joueur, points = False):
         points = 0
         adv = self.ADV if joueur == self.JOUEUR else self.JOUEUR
         v_joueur = self.vecteursLigne(joueur) #alignement jetons du joueur
@@ -67,7 +66,7 @@ class puissance4:
         v_joueur.extend(self.vecteursDiagolanne(joueur))
         
         for i in range(0, len(v_joueur)):
-            p =  v_joueur[i].points(self.valeurMax, self.points)
+            p =  v_joueur[i].points(self.valeurMax, points)
             
             if p == self.valeurMax:
                 points = self.valeurMax
@@ -92,7 +91,7 @@ class puissance4:
          #   print(v_adver[i])
             
         for i in range(0, len(v_adver)):
-            p = v_adver[i].points(self.valeurMax, self.points)
+            p = v_adver[i].points(self.valeurMax, points)
             #print("adv p " + str(p))
             if p == self.valeurMax:
                 points = -self.valeurMax
