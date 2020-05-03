@@ -111,7 +111,7 @@ from minMax import minMax
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
     mM = minMax(-50000,50000,puissance4IA,joueurLocal, True)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),6)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),4)
     puissance4IA.joue(joueurLocal,colonneChoisie)
     print('Fitness: '+str(puissance4IA.fitness(joueurLocal))+'   joueur ia: Alex')
     print(colonneChoisie)
@@ -132,7 +132,7 @@ def getJeuAdvLocal():
 
 def getJeuAdvLocalIA():
     mM = minMax(-50000,50000,puissance4IA,joueurDistant, False)
-    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),3)
+    colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),5)
     print('Fitness: '+str(puissance4IA.fitness(joueurDistant))+'   joueur ia: Liolio')
     return colonneChoisie
 

@@ -20,13 +20,7 @@ class vecteur:
         return content
     
     def points(self, v_max, p): 
-        #coordonnees = []
-        points = 0
-        
-        for i in range(0, len(self.valeurs)):
-            if self.valeurs[i] != 0: # on compte le nb de jetons
-                points += 1
-        """
+        coordonnees = []
         for i in range(0, len(self.valeurs)):#on recuperer les alignements de jetons
             if self.valeurs[i] != self.joueur and self.valeurs[i] != 0:
                 coordonnees = []
@@ -39,27 +33,20 @@ class vecteur:
                 if coordonnees[i][1] != 0: # on compte le nb de jetons
                     points += 1
         
-         """ 
-        """
-        if p == True: 
-            if points == 3:
-                points = 1000
-            elif points == 2:
-                points = 100
-            elif points < 2:
-                points = 0
             
+        if p == True: 
+            if points < 4:
+                points = 0
+           # if points == 2:
+                #points = 40
+            #elif points ==1:
+                #points = 100
+            #elif points ==3:
+                #points = 5
         else:
             if points <= 1:
                 points = 0
-        """   
-        if points == 3:
-            points = 1000
-        elif points == 2:
-            points = 100
-        elif points < 2:
-            points = 0
-                
+            
         return v_max if points == 4 else points  #v_max pour indiquer que l'on peut gagner ce tours !        
 
 class rectangle:
