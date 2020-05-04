@@ -111,11 +111,11 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,4)
+    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,7)
     puissance4IA.joue(joueurLocal,colonneChoisie)
-    print('Fitness: '+str(puissance4IA.fit)+'   joueur ia: Alex')
+    print('Fitness: '+str(puissance4IA.fit2)+'   joueur ia: '+getNomJoueur(joueurLocal))
     print(colonneChoisie)
-    print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
+    # print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
     return colonneChoisie
     # return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
 
@@ -124,19 +124,18 @@ def monjeu():
 def appliqueJeuAdv(jeu):
     print(str(jeu))
     puissance4IA.joue(joueurDistant,jeu)
-    print('Fitness: '+str( puissance4IA.fit)+'   joueur adv: '+getNomJoueur(id))
+    print('Fitness: '+str( puissance4IA.fit2)+'   joueur adv: '+getNomJoueur(joueurDistant))
     print("jeu de l'adversair est ", jeu)
 
 def getJeuAdvLocal():
     return int(input("Choisissez une colonne: "))
 
 def getJeuAdvLocalIA():
-    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,4)
-    print('Fitness: '+str(puissance4IA.fit)+'   joueur ia: Liolio')
+    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,3)
     return colonneChoisie
 
 def getNomJoueur(id):
-    return idjoueurLocal if ((joueurLocalquiCommence and id == 2) or (not joueurLocalquiCommence and id == 1) ) else idjoueurDistant
+    return idjoueurLocal if (joueurLocal == id) else idjoueurDistant
 
 
 if(joueurLocalquiCommence):
@@ -166,8 +165,22 @@ mMdist = minMax(-50000,50000,puissance4IA,joueurDistant, False)
 # puissance4IA.joue(2,9)
 # remplirGrille(2,9)
     
+def VerifieJeu():
+    if (puissance4IA.estTermine):
+        print("La partie est termine !")
+        idGagnant = puissance4IA.JOUEUR if puissance4IA.fit2 > 0 else puissance4IA.ADV
+        print("Le gagnant est ",getNomJoueur(idGagnant)," !")
+        return False
+    else:
+        return True
+    
+
 tour=0
-while(True):
+continuer = True
+
+
+debutchrono = time.time()
+while(continuer):
  
     print("tour " + str(tour))
         
@@ -176,39 +189,168 @@ while(True):
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
+        # print(puissance4IA)
+        continuer = VerifieJeu()
+        if not continuer :
+            break
         jeuAdv = getJeuAdvLocalIA()
-        #jeuAdv=getJeuAdvLocal()
+        # jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
+        # print(puissance4IA)
+        continuer = VerifieJeu()
     else:
         jeuAdv = getJeuAdvLocalIA()
-        #jeuAdv=getJeuAdvLocal()
+        # jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
         remplirGrille(joueurDistant,jeuAdv)
         printGrille()
+        # print(puissance4IA)
+        continuer = VerifieJeu()
+        if not continuer :
+            break
         jeu=monjeu()
         jouerWEB(idjeu,idjoueurLocal,tour,jeu)
         remplirGrille(joueurLocal,jeu)
         printGrille()
+        # print(puissance4IA)
+        continuer = VerifieJeu()
         
+        
+
     tour+=1   
 
     # print('Nombres d executions de fitness: ',puissance4.CPT)  
     # input()   
+print("Temps total de la partie: ", str(round(time.time() - debutchrono, 3)))
+# # COMMANDES POUR LES TESTS
+# from noeud import noeud
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# mM = minMax(-50000,50000,puissance4IA,1)
+# colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
+# puissance4IA.joue(1,3)
+# puissance4IA.fitness2(2)
+# print(puissance4IA)
+# print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
 
-# COMMANDES POUR LES TESTS
-from noeud import noeud
-from minMax import minMax
-from puissance4 import puissance4
-puissance4IA = puissance4(12,6,50000)
-mM = minMax(-50000,50000,puissance4IA,1)
-colonneChoisie, score= mM.minimax_Decision_AlphaBeta(noeud(puissance4IA),2)
-puissance4IA.joue(1,3)
-puissance4IA.fitness(1)
-print(puissance4IA)
-print('Limites: ',puissance4IA.limites.Z,' ',puissance4IA.limites.Q,' ',puissance4IA.limites.S,' ',puissance4IA.limites.D)
+# from noeud import noeud #  MARCHE
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,3)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(1,4)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(1,6)
+# print(puissance4IA)
+# puissance4IA.fitness2(1)
+
+# from noeud import noeud #  MARCHE
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,6)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(1,4)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(1,3)
+# print(puissance4IA)
+# puissance4IA.fitness2(1)
+
+# from noeud import noeud #  MARCHE
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(1,4)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(2,6)
+# puissance4IA.joue(1,6)
+# puissance4IA.joue(1,3)
+# print(puissance4IA)
+# puissance4IA.fitness2(1)
+
+# from noeud import noeud #  MARCHE
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,6)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(1,4)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(1,3)
+# print(puissance4IA)
+# puissance4IA.fit2
+
+
+# from noeud import noeud #  
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,1)
+# puissance4IA.joue(1,1)
+# puissance4IA.joue(1,1)
+# puissance4IA.joue(1,1)
+# print(puissance4IA)
+# puissance4IA.fit2
+
+# from noeud import noeud #  
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,2)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(2,5)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(1,4)
+# puissance4IA.joue(1,3)
+# print(puissance4IA)
+# puissance4IA.fit2
+
+# from noeud import noeud #  
+# from minMax import minMax
+# from puissance4 import puissance4
+# puissance4IA = puissance4(12,6,50000)
+# puissance4IA.joue(1,5)
+# puissance4IA.joue(2,4)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,3)
+# puissance4IA.joue(2,2)
+# puissance4IA.joue(2,2)
+# puissance4IA.joue(2,2)
+# puissance4IA.joue(1,2)
+# puissance4IA.joue(1,3)
+# puissance4IA.joue(1,4)
+# print(puissance4IA)
+# puissance4IA.fit2
+

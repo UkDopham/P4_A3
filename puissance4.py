@@ -15,14 +15,17 @@ class puissance4:
     POIDS = 2
     SEUIL = 4
     
-    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None, dernierJoueur=JOUEUR,limites=None):
+    def __init__(self, tailleLigne, tailleColonne, valeurMax, plateau = None, dernierCoupJoue = None,dernierCoupJoueHauteur = None ,dernierJoueur=JOUEUR,limites=None, fit2=0,nbColonnesPleines=0):
         self.tailleLigne = tailleLigne
         self.tailleColonne = tailleColonne
         self.valeurMax = valeurMax
         self.dernierCoupJoue = dernierCoupJoue
+        self.dernierCoupJoueHauteur = dernierCoupJoueHauteur
         self.dernierJoueur = dernierJoueur
-        self.estTermine = None
+        self.estTermine = False
         self.fit = None
+        self.fit2 = fit2
+        self.nbColonnesPleines =nbColonnesPleines
         self.limites = limites
         
         if limites == None:
@@ -54,14 +57,14 @@ class puissance4:
                     colonne.append(self.plateau[i][j])
                 
                 p.append(colonne)
-            
-            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue, self.dernierJoueur,rectangle(self.limites.Z,self.limites.Q,self.limites.S,self.limites.D))
+            return puissance4(self.tailleLigne, self.tailleColonne, self.valeurMax, p, self.dernierCoupJoue,self.dernierCoupJoueHauteur, self.dernierJoueur,rectangle(self.limites.Z,self.limites.Q,self.limites.S,self.limites.D),self.fit2,self.nbColonnesPleines)
     
     def termine(self):
-        if self.termine == None:
-            self.fitness(1)
+        # if self.termine == None:
+        #     self.fitness2(1)
         # self.fitness(1)
         return self.estTermine
+
         
     def fitness(self, joueur, points = False):
         if (self.fit != None):
@@ -110,11 +113,235 @@ class puissance4:
         
         return points
         
+    def fitness2(self, joueur=1):
+        # if (self.fit2 != None):
+        #     return self.fit2
+
+        points=0
+        val3pions = 100
+        adv = self.ADV if joueur == self.JOUEUR else self.JOUEUR
+        joueur = self.JOUEUR if joueur == self.JOUEUR else self.ADV
+
+        if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue]==joueur :
+            # JOUEUR
+            # valeur a droite
+            if self.dernierCoupJoue-2>=0:
+                if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-1]==joueur:
+                    if(self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-2]==joueur):
+                        if(self.dernierCoupJoue-3>=0 and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-3]==joueur):
+                            self.estTermine = True
+                            points+= self.valeurMax # ALIGNEMENTS DE 4 PIONTS
+                        else:
+                            if self.dernierCoupJoue+1<self.tailleLigne and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax 
+                            else:
+                                points+= val3pions      # ALIGNEMENTS DE 3 PIONTS
+                    elif (self.dernierCoupJoue+1<self.tailleLigne and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==joueur):
+                        points+= val3pions
+            
+            # valeur a gauche
+            if self.dernierCoupJoue+2<self.tailleLigne:
+                if (self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==joueur):
+                    if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+2]==joueur:
+                        if (self.dernierCoupJoue+3<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+3]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else:
+                            if self.dernierCoupJoue-1>=0 and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax 
+                            else:
+                                points+= val3pions
+            
+            # valeur en bas   
+            if (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue]==joueur :
+                    if self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue]==joueur:
+                        if (self.dernierCoupJoueHauteur+3<self.tailleColonne) and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else:
+                            points+= val3pions
+
+            # valeur sur diago (vers haut gauche)
+            if self.dernierCoupJoue-2>=0 and (self.tailleColonne - self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue-1]==joueur :
+                    if self.plateau[self.dernierCoupJoueHauteur-2][self.dernierCoupJoue-2]==joueur:
+                        if (self.dernierCoupJoue-3>=0 and (self.tailleColonne - self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur-3][self.dernierCoupJoue-3]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else:
+                            if  self.dernierCoupJoueHauteur+1<self.tailleColonne and (self.dernierCoupJoue+1<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax
+                            else:
+                                points+= val3pions
+                    elif self.dernierCoupJoueHauteur+1<self.tailleColonne and (self.dernierCoupJoue+1<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==joueur:
+                            points+= val3pions
+            
+            # valeur sur diago (depuis haut droite)
+            if self.dernierCoupJoue-2>=0 and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==joueur:
+                    if self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue-2]==joueur:
+                        if (self.dernierCoupJoue-3>=0 and (self.dernierCoupJoueHauteur+3<self.tailleColonne) )and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue-3]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else :
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur-1>=0 and self.dernierCoupJoue+1<self.tailleLigne)) and self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue+1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax
+                            else:
+                                points+= val3pions
+                    
+            
+            # valeur sur diago (vers haut droite)
+            if self.dernierCoupJoue+2<self.tailleLigne and (self.tailleColonne - self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue+1]==joueur:
+                    if self.plateau[self.dernierCoupJoueHauteur-2][self.dernierCoupJoue+2]==joueur:    
+                        if (self.dernierCoupJoue+3<self.tailleLigne and (self.tailleColonne - self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur-3][self.dernierCoupJoue+3]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else:
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur+1<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax
+                            else:
+                                points+= val3pions
+                    elif (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur+1<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==joueur:
+                       points+= val3pions 
+            
+            # valeur sur diago (depuis haut gauche)
+            if self.dernierCoupJoue+2<self.tailleLigne and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if (self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==joueur):
+                    if (self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue+2]==joueur):
+                        if (self.dernierCoupJoue+3<self.tailleLigne and (self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue+3]==joueur:
+                            self.estTermine = True
+                            points+= self.valeurMax
+                        else:
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur-1>=0)) and self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue-1]==joueur:
+                                self.estTermine = True
+                                points+= self.valeurMax
+                            else:
+                                points+= val3pions
+                    
+            
+         
+        if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue]==adv :
+            # adv
+            # valeur a droite
+            if self.dernierCoupJoue-2>=0:
+                if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-1]==adv:
+                    if(self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-2]==adv):
+                        if(self.dernierCoupJoue-3>=0 and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-3]==adv):
+                            self.estTermine = True
+                            points+= -self.valeurMax # ALIGNEMENTS DE 4 PIONTS
+                        else:
+                            if self.dernierCoupJoue+1<self.tailleLigne and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax 
+                            else:
+                                points+= -val3pions      # ALIGNEMENTS DE 3 PIONTS
+                    elif (self.dernierCoupJoue+1<self.tailleLigne and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==adv):
+                        points+= -val3pions
+            
+            # valeur a gauche
+            if self.dernierCoupJoue+2<self.tailleLigne:
+                if (self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==adv):
+                    if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+2]==adv:
+                        if (self.dernierCoupJoue+3<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+3]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else:
+                            if self.dernierCoupJoue-1>=0 and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax 
+                            else:
+                                points+= -val3pions
+            
+            # valeur en bas   
+            if (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue]==adv :
+                    if self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue]==adv:
+                        if (self.dernierCoupJoueHauteur+3<self.tailleColonne) and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else:
+                            points+= -val3pions
+
+            # valeur sur diago (vers haut gauche)
+            if self.dernierCoupJoue-2>=0 and (self.tailleColonne - self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue-1]==adv :
+                    if self.plateau[self.dernierCoupJoueHauteur-2][self.dernierCoupJoue-2]==adv:
+                        if (self.dernierCoupJoue-3>=0 and (self.tailleColonne - self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur-3][self.dernierCoupJoue-3]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else:
+                            if  self.dernierCoupJoueHauteur+1<self.tailleColonne and (self.dernierCoupJoue+1<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax
+                            else:
+                                points+= -val3pions
+                    elif self.dernierCoupJoueHauteur+1<self.tailleColonne and (self.dernierCoupJoue+1<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==adv:
+                            points+= -val3pions
+            
+            # valeur sur diago (depuis haut droite)
+            if self.dernierCoupJoue-2>=0 and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==adv:
+                    if self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue-2]==adv:
+                        if (self.dernierCoupJoue-3>=0 and (self.dernierCoupJoueHauteur+3<self.tailleColonne) )and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue-3]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else :
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur-1>=0 and self.dernierCoupJoue+1<self.tailleLigne)) and self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue+1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax
+                            else:
+                                points+= -val3pions
+                    
+            
+            # valeur sur diago (vers haut droite)
+            if self.dernierCoupJoue+2<self.tailleLigne and (self.tailleColonne - self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue+1]==adv:
+                    if self.plateau[self.dernierCoupJoueHauteur-2][self.dernierCoupJoue+2]==adv:    
+                        if (self.dernierCoupJoue+3<self.tailleLigne and (self.tailleColonne - self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur-3][self.dernierCoupJoue+3]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else:
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur+1<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax
+                            else:
+                                points+= -val3pions
+                    elif (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur+1<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==adv:
+                       points+= -val3pions 
+            
+            # valeur sur diago (depuis haut gauche)
+            if self.dernierCoupJoue+2<self.tailleLigne and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
+                if (self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==adv):
+                    if (self.plateau[self.dernierCoupJoueHauteur+2][self.dernierCoupJoue+2]==adv):
+                        if (self.dernierCoupJoue+3<self.tailleLigne and (self.dernierCoupJoueHauteur+3<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+3][self.dernierCoupJoue+3]==adv:
+                            self.estTermine = True
+                            points+= -self.valeurMax
+                        else:
+                            if (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur-1>=0)) and self.plateau[self.dernierCoupJoueHauteur-1][self.dernierCoupJoue-1]==adv:
+                                self.estTermine = True
+                                points+= -self.valeurMax
+                            else:
+                                points+= -val3pions
+        
+        
+        self.fit2 += points
+
+        # if self.fit2 > 100 and self.fit2< 20000:
+        #     print("fit2: ",self.fit2)
+        return points
+    
     def __str__(self):
         s = "VISION IA : \n"
-        for i in range(0, self.tailleLigne):
+        for i in range (0, self.tailleColonne):
             s += "\n"
-            for j in range (0, self.tailleColonne):
+            for j in range(0, self.tailleLigne):
                s += str(self.plateau[i][j])+" | "
         s+='\n'
         return s
@@ -198,11 +425,16 @@ class puissance4:
         
     def joueProchainsCoups(self,joueur):
         """ Calcule toutes les prochaines actions possibles """
+        self.nbColonnesPleines = 0
         colonnesJouables = []
         for indexeColonne in range(self.tailleLigne):
             if self.plateau[0][indexeColonne] == 0:
                 colonnesJouables.append(indexeColonne)
-        
+            else:
+                self.nbColonnesPleines+=1
+        if self.nbColonnesPleines == self.tailleLigne:
+            self.estTermine = True
+            return []
         coupsJoues = []
         for indexeColonne in colonnesJouables:
             coupsJoues.append(self.joue(joueur,indexeColonne,True))
@@ -220,8 +452,9 @@ class puissance4:
                     jeuclone.adapteLimite(colonne,self.tailleColonne-1-indexeLigne)
                     break
             jeuclone.dernierCoupJoue = colonne
+            jeuclone.dernierCoupJoueHauteur = self.tailleColonne-1-indexeLigne
             jeuclone.dernierJoueur = joueur
-            # jeuclone.fit = jeuclone.fitness(joueurFitness)
+            jeuclone.fitness2()
             return jeuclone
         else:
             for indexeLigne in range(self.tailleColonne):
@@ -230,10 +463,20 @@ class puissance4:
                     self.adapteLimite(colonne,self.tailleColonne-1-indexeLigne)
                     break
             self.dernierCoupJoue = colonne
+            self.dernierCoupJoueHauteur = self.tailleColonne-1-indexeLigne
             self.dernierJoueur = joueur
-            # self.fit = self.fitness(joueurFitness)
+            self.fitness2()
             return None
 
+    def nbColonnesPleinesAvantIndexe(self,avantColonne):
+        """ Calcule le nombre de colonnes pleine entre 0 et l'indexe donne """
+        # if self.nbColonnesPleines==0:
+        #     return 0
+        nbCol = 0
+        for indexeColonne in range(0,avantColonne):
+            if self.plateau[0][indexeColonne] != 0:
+                nbCol+=1
+        return nbCol
 
     def adapteLimite(self,x,y):
         """ Adapte les limites du rectangle dans lequel sont cherche vecteurs """
