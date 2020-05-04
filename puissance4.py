@@ -118,13 +118,14 @@ class puissance4:
         #     return self.fit2
 
         points=0
-        val3pions = 100
+        val3pions = 50
+        multAgressivite = 3  #multiplicateur d'agressivite
         adv = self.ADV if joueur == self.JOUEUR else self.JOUEUR
         joueur = self.JOUEUR if joueur == self.JOUEUR else self.ADV
 
         if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue]==joueur :
             # JOUEUR
-            # valeur a droite
+            # valeur a droite              X - - -
             if self.dernierCoupJoue-2>=0:
                 if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-1]==joueur:
                     if(self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue-2]==joueur):
@@ -136,11 +137,11 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax 
                             else:
-                                points+= val3pions      # ALIGNEMENTS DE 3 PIONTS
+                                points+= val3pions*multAgressivite      # ALIGNEMENTS DE 3 PIONTS
                     elif (self.dernierCoupJoue+1<self.tailleLigne and self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==joueur):
-                        points+= val3pions
+                        points+= val3pions*multAgressivite
             
-            # valeur a gauche
+            # valeur a gauche          - - - X
             if self.dernierCoupJoue+2<self.tailleLigne:
                 if (self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+1]==joueur):
                     if self.plateau[self.dernierCoupJoueHauteur][self.dernierCoupJoue+2]==joueur:
@@ -152,7 +153,7 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax 
                             else:
-                                points+= val3pions
+                                points+= val3pions*multAgressivite
             
             # valeur en bas   
             if (self.dernierCoupJoueHauteur+2<self.tailleColonne):
@@ -162,7 +163,7 @@ class puissance4:
                             self.estTermine = True
                             points+= self.valeurMax
                         else:
-                            points+= val3pions
+                            points+= val3pions*multAgressivite
 
             # valeur sur diago (vers haut gauche)
             if self.dernierCoupJoue-2>=0 and (self.tailleColonne - self.dernierCoupJoueHauteur+2<self.tailleColonne):
@@ -176,9 +177,9 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax
                             else:
-                                points+= val3pions
+                                points+= val3pions*multAgressivite
                     elif self.dernierCoupJoueHauteur+1<self.tailleColonne and (self.dernierCoupJoue+1<self.tailleLigne) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue+1]==joueur:
-                            points+= val3pions
+                            points+= val3pions*multAgressivite
             
             # valeur sur diago (depuis haut droite)
             if self.dernierCoupJoue-2>=0 and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
@@ -192,7 +193,7 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax
                             else:
-                                points+= val3pions
+                                points+= val3pions*multAgressivite
                     
             
             # valeur sur diago (vers haut droite)
@@ -207,9 +208,9 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax
                             else:
-                                points+= val3pions
+                                points+= val3pions*multAgressivite
                     elif (self.dernierCoupJoue-1>=0 and (self.dernierCoupJoueHauteur+1<self.tailleColonne)) and self.plateau[self.dernierCoupJoueHauteur+1][self.dernierCoupJoue-1]==joueur:
-                       points+= val3pions 
+                       points+= val3pions*multAgressivite 
             
             # valeur sur diago (depuis haut gauche)
             if self.dernierCoupJoue+2<self.tailleLigne and (self.dernierCoupJoueHauteur+2<self.tailleColonne):
@@ -223,7 +224,7 @@ class puissance4:
                                 self.estTermine = True
                                 points+= self.valeurMax
                             else:
-                                points+= val3pions
+                                points+= val3pions*multAgressivite
                     
             
          
