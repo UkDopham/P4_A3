@@ -9,17 +9,12 @@ from puissance4 import puissance4
 import time
 
 class minMax:
-
-    MIN_VAL = -1000000
-    MAX_VAL = 1000000
     
-    def __init__(self,min,max,plateau,idJoueur): # utile ?
-        self.MIN_VAL = min
-        self.MAX_VAL = max
-        self.s = plateau  # instance du plateau (puissance 4)
+    def __init__(self,plateau,idJoueur):
+        self.plateau = plateau  # instance du plateau (puissance 4)
         self.idJoueur = idJoueur
         self.nPrincipal = noeud(plateau)
-        self.tempsCumule=0 #a rajouter
+        self.feuillePrometeuse = (float('-inf'), self.nPrincipal,False) # feuille plus interessante de l'arbre calcule (  score | node | estMax )
 
 
     # n.valeur = instance du plateau de jeu (puissance4)
@@ -43,28 +38,44 @@ class minMax:
             return -n.valeur.fit2
         return n.valeur.fit2
 
-
-
-    def minimax_Decision_AlphaBeta(self,puissance4Jeu, rangMax):
-        debutchrono = time.time()
-                
-        if puissance4Jeu.dernierCoupJoue != None and (len(self.nPrincipal.enfants)-puissance4Jeu.nbColonnesPleines)!=0: # on update la position de la node selon le dernier coup de l'adversaire
-            self.nPrincipal = self.nPrincipal.enfants[puissance4Jeu.dernierCoupJoue-puissance4Jeu.nbColonnesPleinesAvantIndexe(puissance4Jeu.dernierCoupJoue)]
+    def majPositionPrincipalAvant(self):
+        if self.plateau.dernierCoupJoue != None and (len(self.nPrincipal.enfants)-self.plateau.nbColonnesPleines)!=0: # on update la position de la node selon le dernier coup de l'adversaire
+            self.nPrincipal = self.nPrincipal.enfants[self.plateau.dernierCoupJoue-self.plateau.nbColonnesPleinesAvantIndexe(self.plateau.dernierCoupJoue)]
            
-        node, score = self.maxValueAB(self.nPrincipal,self.MIN_VAL*2,self.MAX_VAL*2, rangMax)
+
+    def majPositionPrincipalApres(self,node):
+        if node == None:
+            self.plateau.estTermine = True
+        self.nPrincipal = node
+
+    def minimax_Decision_AlphaBeta(self, rangMax, speedStart = False):
+        debutchrono = time.time()
+
+        node,score=None,None
+
+        if speedStart:
+            if self.feuillePrometeuse[2]:
+                node, score = self.minValueAB( self.feuillePrometeuse[1] ,float('-inf'),float('inf'), rangMax)
+            else:
+                node, score = self.maxValueAB( self.feuillePrometeuse[1] ,float('-inf'),float('inf'), rangMax)
+        else:
+            node, score = self.maxValueAB( self.nPrincipal ,float('-inf'),float('inf'), rangMax)
+
+        
+        
         if score == float('inf') or score==float('-inf'):
             score = 0            
-            puissance4Jeu.fit2 = 0
-            print("Score infini dectecte, et efface")
-                
+            self.plateau.fit2 = 0
+        
+        if not speedStart:
+            self.majPositionPrincipalApres(node)
+
             
         colonne = node.valeur.dernierCoupJoue if node != None else -1
-        if node == None:
-            puissance4Jeu.estTermine = True
-        self.nPrincipal = node
+        
   
         finchrono = time.time()
-        print("Calculs termines!\nTemps de calculs: ", str(round(finchrono - debutchrono, 3)))
+        print("minMax:  rang=",rangMax,"  Temps de calculs=", str(round(finchrono - debutchrono, 3)))
         
         return colonne, score
 
@@ -72,8 +83,9 @@ class minMax:
 
 
     def maxValueAB(self,n,alpha,beta,rang=0):
-       
         if  rang == 0 or self.terminialTest(n) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
+            if (self.utility(n) < self.feuillePrometeuse[0]):
+                self.feuillePrometeuse = (self.utility(n),n,True)
             return n, self.utility(n)
         v = float('-inf')
         node = None
@@ -93,6 +105,8 @@ class minMax:
 
     def minValueAB(self,n,alpha,beta,rang=0):
         if  rang == 0 or self.terminialTest(n) :
+            if (self.utility(n) < self.feuillePrometeuse[0]):
+                self.feuillePrometeuse = (self.utility(n),n,False)
             return n, self.utility(n)
         v = float('inf')
         node = None

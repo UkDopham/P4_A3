@@ -114,7 +114,9 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(puissance4IA,6)
+    #mMloc.majPositionPrincipalAvant()
+    #colonneChoisie, score= mMloc.minimax_Decision_AlphaBeta(4)
+    colonneChoisie, score= compteurIA.joue2() 
     puissance4IA.joue(joueurLocal,colonneChoisie)
 
     if score > 20000 :
@@ -122,7 +124,7 @@ def monjeu():
     elif score < -20000:
         print(CORANGE+getNomJoueur(joueurLocal)+" : J'AI PERDU ..."+CEND) 
 
-    print('Fitness: '+str(puissance4IA.fit2)+'   J1: '+getNomJoueur(joueurLocal))
+    print('Fitness: '+str(puissance4IA.fit2)+'   Score trouve:'+str(score)+'   J1: '+getNomJoueur(joueurLocal))
     
     print('Colonne choisie :  ',colonneChoisie)
     return colonneChoisie
@@ -138,7 +140,8 @@ def getJeuAdvLocal(): # pour jouer avec quelqun en local
     return int(input("Choisissez une colonne: "))
 
 def getJeuAdvLocalIA(): # pour jouer contre elle meme
-    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(puissance4IA,4)
+    mMdist.majPositionPrincipalAvant()
+    colonneChoisie, score= mMdist.minimax_Decision_AlphaBeta(6)
     if score > 20000 :
         print(CGREEN+getNomJoueur(joueurDistant)+" : J'AI GAGNE!!!"+CEND)
     elif score < -20000:
@@ -163,8 +166,10 @@ from puissance4 import puissance4
 puissance4IA = puissance4(grilleColonne,grilleLigne,valMax, dernierJoueur= 1 if joueurLocalquiCommence else 2)
 from noeud import noeud
 from minMax import minMax
-mMloc = minMax(-valMax,valMax,puissance4IA,joueurLocal)    
-mMdist = minMax(-valMax,valMax,puissance4IA,joueurDistant)
+from compteur import compteur
+mMloc = minMax(puissance4IA,joueurLocal)    
+mMdist = minMax(puissance4IA,joueurDistant)
+compteurIA = compteur(puissance4IA,joueurLocal)
 
     
 def VerifieJeu():
@@ -199,9 +204,9 @@ while(continuer):
         continuer = VerifieJeu()
         if not continuer :
             break
-        # jeuAdv = getJeuAdvLocalIA()
+        jeuAdv = getJeuAdvLocalIA()
         # jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
@@ -210,9 +215,9 @@ while(continuer):
         # print(puissance4IA)
         continuer = VerifieJeu()
     else:
-        # jeuAdv = getJeuAdvLocalIA()
+        jeuAdv = getJeuAdvLocalIA()
         # jeuAdv=getJeuAdvLocal()
-        jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
+        # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA
         appliqueJeuAdv(jeuAdv)
@@ -235,6 +240,8 @@ while(continuer):
     tour+=1   
   
 print("Temps total de la partie: ", str(round(time.time() - debutchrono, 3)))
+print("Temps total utilise par J1: ", str(compteurIA.chronoCumul))
+print("Temps total utilise par J2: ", str(round(time.time() - debutchrono, 3)-compteurIA.chronoCumul))
 # # COMMANDES POUR LES TESTS
 # from noeud import noeud
 # from minMax import minMax
