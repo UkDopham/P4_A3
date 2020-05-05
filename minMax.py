@@ -62,7 +62,6 @@ class minMax:
             node, score = self.maxValueAB( self.nPrincipal ,float('-inf'),float('inf'), rangMax)
 
         
-        
         if score == float('inf') or score==float('-inf'):
             score = 0            
             self.plateau.fit2 = 0
@@ -86,7 +85,7 @@ class minMax:
         if  rang == 0 or self.terminialTest(n) : # verifie si on doit s'arreter ou si on est arrive en bout de branche
             if (self.utility(n) < self.feuillePrometeuse[0]):
                 self.feuillePrometeuse = (self.utility(n),n,True)
-            return n, self.utility(n)
+            return n, self.utility(n)*(rang+1) # multiplicateur, selon le rang (les premiers rangs sont valorises)
         v = float('-inf')
         node = None
         if len(n.enfants) == 0:
@@ -94,7 +93,7 @@ class minMax:
     
         for action in n.enfants: # pour chacuns des ns fils,
             nd, val = self.minValueAB(action,alpha,beta,rang-1) # recupere leurs valeurs
-                
+            
             if val > v:
                 node = action
             v = max(v,val)      # cherche la plus grande
@@ -107,7 +106,7 @@ class minMax:
         if  rang == 0 or self.terminialTest(n) :
             if (self.utility(n) < self.feuillePrometeuse[0]):
                 self.feuillePrometeuse = (self.utility(n),n,False)
-            return n, self.utility(n)
+            return n, self.utility(n)*(rang+1)
         v = float('inf')
         node = None
         if len(n.enfants) == 0:

@@ -205,7 +205,7 @@ while(continuer):
         if not continuer :
             break
         jeuAdv = getJeuAdvLocalIA()
-        # jeuAdv=getJeuAdvLocal()
+        #jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA
@@ -216,7 +216,7 @@ while(continuer):
         continuer = VerifieJeu()
     else:
         jeuAdv = getJeuAdvLocalIA()
-        # jeuAdv=getJeuAdvLocal()
+        #jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA

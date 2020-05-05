@@ -21,50 +21,10 @@ class compteur:
         self.nbTourPourFin = -1
         self.rang = 4 # nb par default de tours calcules en avance
         
-
-    def joue(self,nbRangs=4, temps=5):
-        debutchrono = time.time()
-        
-        self.minMax.majPositionPrincipalAvant()
-
-        speedStart = False
-        colonne, score = None,0
-        tempc = self.c
-        cpt=0
-        
-
-        tempScore = 0
-        tempColonne = 0
-        while round(time.time() - debutchrono, 2) < temps and tempc <= self.limiteCoups:
-            nbRangs = nbRangs if self.limiteCoups-self.c >= nbRangs else self.limiteCoups-self.c
-            print("Lancement minMax : rangMax=",nbRangs,"   speedStart=",speedStart)
-
-            colonne1, score1 = self.minMax.minimax_Decision_AlphaBeta(nbRangs,speedStart)
-            if score1 > tempScore:
-                print("Le resulat c'est ameliore")
-            if score1>40000:
-                print("Moyen de gagne trouve !   ****************** ")
-            tempScore = score1
-            tempColonne = colonne1
-
-
-            if speedStart == False:
-                speedStart = True
-            if colonne==None:
-                colonne=colonne1
-                score=score1
-            tempc+=nbRangs
-            cpt+=1
-        self.c += 1
-        
-        valchrono = round(time.time() - debutchrono, 2)
-        print("nb de boucles effectues: ",cpt)
-        print("compteur:  Temps total utilise: ",valchrono)
-        self.chronoCumul += valchrono
-        return colonne, score 
-        
+   
 
     def joue2(self):
+        """ Execute des minmax avec une valeur de rang optimale et recupere le resultat """
         debutchrono = time.time()
         colonneChoisie, score=0,0
         self.minMax.majPositionPrincipalAvant()
@@ -73,10 +33,8 @@ class compteur:
             r = self.rang
             if self.tour<4:
                 r=4
-            elif self.tour<12:
-                r=6
             else :
-                r=7
+                r=6
          
             r = r if (self.limiteCoups-self.tour)*2 >= r else (self.limiteCoups-self.tour+1)*2
             
