@@ -32,7 +32,7 @@ class compteur:
         if not self.cGagne:
             r = self.rang
             if self.tour<4:
-                r=4
+                r=5
             else :
                 r=6
          

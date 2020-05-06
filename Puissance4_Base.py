@@ -108,7 +108,7 @@ idjeu="Alex_vs_IA40004"
 idjoueurLocal="IA"
 idjoueurDistant="Alex"
 # bien préviser si vous commencer le jeu ou c'est l'adversaire qui commence
-joueurLocalquiCommence=True
+joueurLocalquiCommence=False
 
 
 
@@ -204,8 +204,8 @@ while(continuer):
         continuer = VerifieJeu()
         if not continuer :
             break
-        jeuAdv = getJeuAdvLocalIA()
-        #jeuAdv=getJeuAdvLocal()
+        #jeuAdv = getJeuAdvLocalIA()
+        jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA
@@ -215,8 +215,8 @@ while(continuer):
         # print(puissance4IA)
         continuer = VerifieJeu()
     else:
-        jeuAdv = getJeuAdvLocalIA()
-        #jeuAdv=getJeuAdvLocal()
+        #jeuAdv = getJeuAdvLocalIA()
+        jeuAdv=getJeuAdvLocal()
         # jeuAdv=loopToGetJeuAdv( 3,idjeu,idjoueurDistant,tour)
 
         #c'est ce jeu qu'on doit transmettre à notre IA
